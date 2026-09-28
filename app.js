@@ -22,6 +22,18 @@ if(form){
 }
 document.querySelectorAll('.mobile-menu nav a').forEach(link=>link.addEventListener('click',()=>link.closest('details').removeAttribute('open')));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){const menu=document.querySelector('.mobile-menu[open]');if(menu){menu.removeAttribute('open');menu.querySelector('summary').focus();}}});
+// The home header is transparent over the complete scroll film, then gains its
+// solid surface only when the first content section reaches it.
+(()=>{
+  const film=document.querySelector('.scroll-film');
+  const header=document.querySelector('.header');
+  const next=document.querySelector('#solutions');
+  if(!film||!header||!next)return;
+  let frame=0;
+  const render=()=>{frame=0;header.classList.toggle('is-solid',next.getBoundingClientRect().top<=header.offsetHeight);};
+  const schedule=()=>{if(!frame)frame=requestAnimationFrame(render);};
+  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});render();
+})();
 const story=document.querySelector('.story');
 if(story){
   const preference=matchMedia('(prefers-reduced-motion: reduce)');
