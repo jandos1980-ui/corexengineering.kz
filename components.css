@@ -358,3 +358,75 @@
   .task-scenario a:hover span[aria-hidden]{transform:translateX(4px)}
 }
 .task-scenario a:focus-visible{text-decoration:underline;text-underline-offset:5px}
+
+/* Dense desktop: use the wide canvas without asking visitors to zoom out.
+   Phones and tablets retain the existing, touch-first rhythm. */
+@media(min-width:1280px){
+  :root{--desktop-gutter:clamp(64px,4.4vw,84px)}
+  body{font-size:16px;line-height:1.55}
+  .header{height:76px;padding-left:var(--desktop-gutter);padding-right:var(--desktop-gutter)}
+  .header .brand img{width:148px;height:50px}
+  .header nav{font-size:14px;gap:20px}
+  .header-actions{gap:10px}
+  .language{font-size:13px;padding:10px}
+
+  .section{max-width:1800px;padding:78px var(--desktop-gutter)}
+  h2{font-size:clamp(30px,3vw,48px);margin-bottom:20px}
+  .eyebrow{margin-bottom:18px}
+  .intro,.section-heading .intro{font-size:17px;margin-bottom:18px}
+  .section-heading{gap:5%}
+
+  .trust-strip{padding-left:var(--desktop-gutter);padding-right:var(--desktop-gutter)}
+  .trust-strip>div{padding:22px 26px}
+  .trust-strip strong{font-size:20px}
+  .trust-strip span{font-size:14px}
+
+  .task-grid{margin-top:28px}
+  .task-scenario{padding:26px clamp(28px,2.5vw,44px)}
+  .task-scenario h3{font-size:clamp(22px,1.7vw,27px);margin-top:18px}
+  .task-scenario p{font-size:16px;line-height:1.5;margin-bottom:18px}
+  .task-scenario a{font-size:15px;min-height:40px}
+
+  #approach .section-heading{margin-bottom:26px}
+  #approach .steps{margin-top:34px}
+  #approach .steps h3{font-size:20px;margin:19px 0 11px}
+  #approach .steps p{font-size:15px;line-height:1.5}
+  #approach .steps li{padding-right:16px}
+
+  .about-top{gap:54px}.about-top>p{font-size:18px;margin-top:30px}
+  .about-items{gap:28px;margin-top:32px}.about-items>div{padding-top:18px}
+  .about-items h3{font-size:22px;margin:14px 0}.about-items p{font-size:16px}
+
+  .team-layout{padding-top:72px;padding-bottom:56px}.team-grid{gap:16px;margin:28px 0}
+  .team-person{min-height:144px;padding:20px}.team-person h3{font-size:23px}
+  .team-person p,.team-note{font-size:14px}
+
+  .product-showcase{padding-top:72px;padding-bottom:64px}
+  .product-showcase h2{font-size:clamp(30px,3vw,48px)}
+  .product-grid{gap:18px}.product-visual{height:330px}.product-copy{padding:22px}
+  .product-copy h3{font-size:23px}.product-copy p{font-size:15px}
+
+  .faq{padding-top:64px;padding-bottom:64px}.faq details{padding:18px 0}
+  .faq summary{font-size:19px}.faq details p{font-size:16px}
+
+  .contact-section{padding:72px var(--desktop-gutter)}.contact-grid{max-width:1600px;gap:72px}
+  .contact-grid h2{font-size:clamp(34px,3.4vw,54px)}.contact-grid>div>p{font-size:17px}
+  .contact-links{margin-top:28px}.contact-links>a:first-child{font-size:clamp(19px,1.8vw,27px)}
+  form label{font-size:14px;margin-bottom:20px}form input,form textarea{font-size:16px;padding:11px 0}
+  .footer{padding:36px var(--desktop-gutter)}
+
+  .detail-hero{padding:38px var(--desktop-gutter) 50px;gap:54px}
+  .detail-hero h1{font-size:clamp(34px,3.8vw,58px);margin-top:22px;margin-bottom:20px}
+  .detail-hero p{font-size:18px;line-height:1.55;margin-bottom:24px}.detail-hero .back{margin-bottom:38px}
+  .detail-hero img{height:350px}.detail-hero figcaption{margin-top:8px}
+  .modular-page .section{padding-top:64px;padding-bottom:64px}
+  .fit{gap:58px;padding-bottom:44px;margin-bottom:48px}.fit p{font-size:20px}
+  .scope-grid{margin-top:26px}.scope-grid article{padding:26px}.scope-grid h3{font-size:24px;margin:16px 0 10px}
+  .scope-grid p{font-size:16px;line-height:1.55}.direction-nav{padding-top:30px;padding-bottom:30px}
+
+  .scroll-film{--header-height:76px}
+  .film-copy h1,.film-copy h2{font-size:clamp(36px,4vw,66px)}
+  .film-lead{font-size:clamp(16px,1.2vw,19px);max-width:470px}
+  .film-kicker{margin-bottom:22px}.is-scroll-film .film-actions{bottom:96px}
+  .is-scroll-film .film-footer{bottom:20px}.film-actions .button{min-height:48px;font-size:15px}
+}
