@@ -36,7 +36,7 @@
       containerShow={index:i,variants,images,current:0,timer:null,visible:false};
     }
     if(hasStructure){
-      const exploded=slide.image.cloneNode(true);exploded.src='/assets/catalog-metarack-computing-exploded.png';exploded.loading='eager';exploded.width=1000;exploded.height=588;exploded.className='sq-exploded';exploded.alt='';exploded.setAttribute('aria-hidden','true');picture.append(exploded);tab.classList.add('sq-has-structure');
+      const exploded=slide.image.cloneNode(true);exploded.src=new URL('catalog-metarack-computing-exploded.png',slide.image.src).href;exploded.loading='eager';exploded.width=1000;exploded.height=588;exploded.className='sq-exploded';exploded.alt='';exploded.setAttribute('aria-hidden','true');picture.append(exploded);tab.classList.add('sq-has-structure');
     }
     tab.append(picture);strip.append(tab);tabs.push(tab);
     const panel=document.createElement('div');panel.className='sq-panel';panel.id=`sq-panel-${i}`;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',tab.id);
