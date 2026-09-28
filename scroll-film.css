@@ -274,3 +274,16 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .home-header.is-solid{background-color:var(--navy)!important;border-color:#ffffff1c!important;box-shadow:0 1px 0 #00000020!important}
  .home-header + main .is-scroll-film .film-stage{top:0;height:100svh}
 }
+
+/* Lighter photography: retain contrast beneath copy and controls. */
+.scroll-film .film-scene .film-shade{
+ display:block;
+ background:linear-gradient(90deg,#171d26cc 0%,#171d26a6 32%,#171d2620 68%,transparent),linear-gradient(0deg,#171d26b3,transparent 38%);
+}
+.scroll-film .film-scene-4 .film-visual{object-position:75% center;transform-origin:80% 55%}
+@media(max-width:700px){
+ .scroll-film .film-scene .film-shade{
+  background:linear-gradient(90deg,#171d26b8,#171d2699 65%,#171d2633),linear-gradient(0deg,#171d26cc,transparent 55%);
+ }
+ .scroll-film .film-scene-4 .film-visual{object-position:85% center}
+}
