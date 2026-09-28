@@ -269,7 +269,7 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
 /* Home only: the first film scene owns the background. The header becomes
    solid at the beginning of the content that follows it. */
 @media(min-width:701px){
- :root{--header-height:72px}
- body:has(.scroll-film) .header{position:fixed;left:0;right:0;top:0;width:100%;background:transparent;border-color:transparent;transition:background-color 240ms var(--ease-out),border-color 240ms var(--ease-out),box-shadow 240ms var(--ease-out)}
- body:has(.scroll-film) .header.is-solid{background:var(--navy);border-color:#ffffff1c;box-shadow:0 1px 0 #00000020}
+ :root{--header-height:65px}
+ .home-header{position:fixed;left:0;right:0;top:0;width:100%;height:var(--header-height);background-color:transparent!important;border-color:transparent!important;box-shadow:none!important;transition:background-color 240ms var(--ease-out),border-color 240ms var(--ease-out),box-shadow 240ms var(--ease-out)}
+ .home-header.is-solid{background-color:var(--navy)!important;border-color:#ffffff1c!important;box-shadow:0 1px 0 #00000020!important}
 }
