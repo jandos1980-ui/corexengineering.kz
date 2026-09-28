@@ -1,0 +1,262 @@
+/* CoreX Film: scroll is the timeline. Static HTML remains the fallback. */
+
+
+:root{--navy:#171d26;--ink:#171d26;--muted:#5d6878;--paper:#f4f5f7;--blue:#2458e6;--cyan:#b9e5f4;--header-height:84px}
+h1,h2,h3,h4{font-family:Unbounded,"Golos Text",sans-serif;font-weight:600}
+:lang(kk) h1,:lang(kk) h2,:lang(kk) h3,:lang(kk) h4{font-family:"Golos Text",Arial,sans-serif;font-weight:600}
+html{scroll-padding-top:calc(var(--header-height) + 16px)}
+.header{position:sticky;top:0;z-index:30;height:var(--header-height);background:var(--navy);gap:20px}
+.header .brand img{width:160px;height:54px}
+.header nav{font-family:"Golos Text",Arial,sans-serif;font-size:14px;gap:22px}
+.header-contact{background:var(--blue);border-color:transparent;white-space:nowrap;gap:12px}
+.header-contact span{display:none}
+.blue{background:var(--blue);color:#ffffff}
+.scroll-film{background:var(--navy);color:#ffffff}
+.film-stage{position:relative}
+.film-scene{position:relative;min-height:680px;overflow:hidden;background:var(--navy)}
+.film-visual,.film-shade{position:absolute;inset:0;width:100%;height:100%}
+.film-visual{object-fit:cover;object-position:65% 50%;transform-origin:68% 55%}
+.film-shade{background:linear-gradient(90deg,#171d26ed 0%,#171d26c9 32%,#171d2640 64%,#171d2610),linear-gradient(0deg,#171d26d9,transparent 45%)}
+.film-copy{position:relative;z-index:1;padding:90px 4.5% 140px;max-width:1020px}
+.film-kicker{display:flex;gap:22px;align-items:center;color:var(--cyan);font-size:13px;margin:0 0 30px}
+.film-kicker>span{font:11px "Golos Text",sans-serif;letter-spacing:.06em}
+.film-copy h1,.film-copy h2{font-size:clamp(38px,4.65vw,76px);line-height:1.08;letter-spacing:-.045em;margin:0;text-wrap:balance;color:white}
+.film-copy h1 em{font-style:normal;color:var(--cyan)}
+.film-lead{font-size:clamp(17px,1.45vw,22px);line-height:1.5;color:#f4f5f7;max-width:520px;margin:26px 0 0;text-wrap:pretty}
+.film-note{position:absolute;z-index:2;right:4.5%;bottom:30px;color:#b9e5f4;font-size:11px}
+.film-actions{display:flex;align-items:center;gap:32px;padding:28px 4.5% 45px;background:var(--navy)}
+.film-actions .button{min-height:52px;gap:30px;border-radius:4px}
+.film-skip{display:flex;gap:20px;align-items:center;min-height:48px;font-size:15px;color:#ffffff}
+.film-footer{display:none}
+.film-scene-1 .film-visual{inset:20% 2% 22% auto;width:48%;height:58%;object-fit:contain;background:#ffffff;border-radius:4px;transform-origin:center}
+.film-scene-1 .film-shade{background:linear-gradient(90deg,#171d26 0%,#171d26 38%,transparent 58%)}
+.film-scene-1 .film-copy{max-width:48%}
+.film-scene-1 .film-copy h2{font-size:clamp(32px,3.5vw,58px)}
+.film-scene-2 .film-copy{max-width:none}
+.film-scene-2 .film-shade{background:radial-gradient(ellipse at 85% 40%,#171d26 0%,#171d26 65%)}
+.film-systems{display:grid;grid-template-columns:repeat(3,1fr);max-width:1020px;gap:32px;margin-top:42px}
+.film-system{border-top:1px solid #5d6878;padding-top:16px}
+.film-system>span{font:18px "Golos Text",sans-serif;color:var(--cyan)}
+.film-system h3{font-size:clamp(18px,1.7vw,26px);letter-spacing:-.025em;margin:12px 0}
+.film-system p{font-size:15px;line-height:1.45;color:#b9e5f4;margin:0;max-width:260px}
+.film-scene-3 .film-visual{object-position:75% center}
+.film-scene-4 .film-shade{background:linear-gradient(90deg,#171d26f5,#171d268c),linear-gradient(0deg,#171d26e0,transparent)}
+/* Enhancement only after the controller has initialized. */
+.scroll-film.is-scroll-film{height:500svh}
+.is-scroll-film .film-stage{position:sticky;top:var(--header-height);height:calc(100svh - var(--header-height));min-height:560px;overflow:hidden;isolation:isolate}
+.is-scroll-film .film-scenes,.is-scroll-film .film-scene{position:absolute;inset:0;min-height:0}
+.is-scroll-film .film-scene{opacity:0;pointer-events:none}
+.is-scroll-film .film-scene:first-child{opacity:1}
+.is-scroll-film .film-copy{position:absolute;left:0;top:45%;width:100%;padding:0 4.5%;transform:translateY(-50%)}
+.is-scroll-film .film-actions{position:absolute;z-index:10;left:4.5%;bottom:112px;padding:0;background:transparent}
+.is-scroll-film .film-note{bottom:88px}
+.is-scroll-film .film-footer{display:flex;position:absolute;left:4.5%;right:4.5%;bottom:26px;z-index:10;gap:40px;align-items:end}
+.film-instruction{font-size:12px;color:#b9e5f4;max-width:180px;line-height:1.5}
+.film-progress{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;flex:1}
+.film-step-label{font:10px "Golos Text",sans-serif;color:#f4f5f7;display:flex;gap:10px;white-space:nowrap;margin-bottom:12px}
+.film-step-label>span{font-family:"Golos Text",sans-serif;font-size:12px}
+.film-track{height:2px;background:#ffffff38;display:block;overflow:hidden}
+.film-track i{display:block;height:100%;background:var(--cyan);transform:scaleX(0);transform-origin:left}
+.is-scroll-film .film-scene-2 .film-copy{top:40%}
+.film-scene-2 .film-copy h2{font-size:clamp(34px,3.8vw,62px)}
+.film-scene-4 .film-copy{max-width:1100px}
+@media(hover:hover) and (pointer:fine){.film-skip:hover{color:var(--cyan)}.film-actions .blue:hover{background:#ffffff;color:var(--navy)}}
+@media(max-width:1250px){.header .header-contact{display:flex}.header>nav{display:none}.header .mobile-menu{display:block}.mobile-menu[open] nav{display:flex;position:absolute;right:0;top:var(--header-height);width:min(360px,94vw);flex-direction:column;background:var(--navy);padding:24px;z-index:100;gap:18px}.film-step-label>span{display:none}}
+@media(max-width:700px){
+  :root{--header-height:72px}
+  .header{padding:0 20px}.header .brand img{width:126px;height:44px}.header .header-contact{display:none}
+  .header-actions{gap:8px}.mobile-menu summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
+  .scroll-film.is-scroll-film{height:420svh}
+  .is-scroll-film .film-stage{min-height:520px}
+  .film-scene{min-height:620px}
+  .film-copy{padding:70px 24px 100px}
+  .film-copy h1,.film-copy h2{font-size:clamp(31px,8.4vw,52px);line-height:1.12;letter-spacing:-.04em}
+  .film-kicker{font-size:12px;gap:16px;margin-bottom:24px}
+  .film-lead{font-size:17px;max-width:340px;margin-top:20px}
+  .film-visual{object-position:65% center}
+  .film-shade{background:linear-gradient(90deg,#171d26e8,#171d2670),linear-gradient(0deg,#171d26f0,transparent 75%)}
+  .is-scroll-film .film-copy{top:36%;padding:0 24px;max-width:none}
+  .film-actions{padding:24px;gap:20px;flex-wrap:wrap}
+  .is-scroll-film .film-actions{left:24px;right:24px;bottom:116px;gap:20px}
+  .film-actions .button{padding:14px 18px;gap:18px;font-size:14px;min-height:48px}
+  .film-skip{font-size:14px;gap:10px}
+  .film-note{left:24px;right:24px;bottom:24px;font-size:10px}
+  .is-scroll-film .film-note{bottom:88px}
+  .is-scroll-film .film-footer{left:24px;right:24px;bottom:24px;gap:12px;display:block}
+  .film-instruction{display:block;max-width:none;font-size:10px;margin-bottom:12px}
+  .film-progress{gap:12px}.film-step-label{margin-bottom:7px}
+  .film-scene-1 .film-copy{max-width:none}
+  .film-scene-1 .film-visual{inset:auto 24px 135px;width:calc(100% - 48px);height:190px}
+  .film-scene-1 .film-shade{display:none}
+  .film-scene-1 .film-copy{padding-bottom:350px}
+  .is-scroll-film .film-scene-1 .film-copy{top:32px;padding-bottom:0;transform:none!important}
+  .is-scroll-film .film-scene-1 .film-copy h2{font-size:clamp(27px,7vw,42px)}
+  .is-scroll-film .film-scene-1 .film-visual{bottom:180px;height:24%}
+  .is-scroll-film .film-scene-1 .film-lead{font-size:15px;margin-top:14px}
+  .film-systems{grid-template-columns:1fr;gap:14px;margin-top:24px}
+  .film-system{padding-top:10px;display:grid;grid-template-columns:28px 1fr;gap:4px 10px}.film-system>span{font-size:14px;grid-row:span 2}
+  .film-system h3{font-size:17px;line-height:1.2;margin:0}
+  .film-system p{font-size:12px;grid-column:2;max-width:none}
+  .film-scene-2 .film-copy h2{font-size:clamp(28px,7.5vw,42px)}
+  .is-scroll-film .film-scene-2 .film-copy{top:28px;transform:none!important}
+}
+@media(max-width:380px){.is-scroll-film .film-actions{gap:8px}.film-actions .button{padding:12px;gap:10px}.film-skip{font-size:12px}.film-system p{display:none}}
+@media(max-width:380px){.is-scroll-film .film-scene-0 .film-copy{top:24%}.is-scroll-film .film-scene-1 .film-copy{top:10px}.is-scroll-film .film-module-views{bottom:0;height:16%}}
+@media(prefers-reduced-motion:reduce){.film-visual,.film-copy{transform:none!important}}
+/* Compact preview panes still run the film; fit the stage to their real height. */
+@media(min-height:450px) and (max-height:639px){
+  .is-scroll-film .film-stage{min-height:0}
+  .is-scroll-film .film-copy{top:38%}
+  .is-scroll-film .film-scene-0 .film-copy{top:24% !important}
+  .is-scroll-film .film-copy h1,.is-scroll-film .film-copy h2{font-size:clamp(25px,4vw,40px)}
+  .is-scroll-film .film-kicker{margin-bottom:14px;font-size:11px}
+  .is-scroll-film .film-lead{font-size:14px;margin-top:14px}
+  .is-scroll-film .film-actions{bottom:88px}
+  .is-scroll-film .film-note{bottom:65px;font-size:9px}
+  .is-scroll-film .film-footer{bottom:15px}
+  .is-scroll-film .film-instruction{display:none}
+  .is-scroll-film .film-scene-2 .film-copy{top:16px;transform:none!important}
+  .is-scroll-film .film-systems{margin-top:16px;gap:10px}
+  .is-scroll-film .film-system{padding-top:8px}
+  .is-scroll-film .film-system h3{font-size:15px}
+  .is-scroll-film .film-system p{display:none}
+}
+/* Cutouts processed from supplied catalogue imagery; originals are archived. */
+.film-module-views{position:absolute;right:3%;top:18%;width:47%;height:55%;display:grid;gap:16px}
+.film-module-views:before{content:'';position:absolute;inset:-12% -3%;background:radial-gradient(ellipse at 55% 55%,#5d687865,transparent 68%);pointer-events:none}
+.film-module-views:after{content:'';position:absolute;bottom:18px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,#b9e5f470,transparent);pointer-events:none}
+.film-module-view img{filter:drop-shadow(0 20px 16px #171d2640)}
+.film-module-view{margin:0;background:transparent;border-radius:5px;padding:16px;display:flex;flex-direction:column;min-height:0}
+.film-module-view img{width:100%;height:calc(100% - 24px);min-height:0;object-fit:contain}
+.film-module-view figcaption{font-size:12px;color:var(--cyan);margin-top:6px;letter-spacing:.04em}
+.is-scroll-film .film-module-view{position:absolute;inset:0}
+.is-scroll-film .film-module-inside{opacity:0}
+.film-scene-1 .film-shade{display:none}
+.film-equipment{height:clamp(110px,19svh,175px);background:radial-gradient(ellipse at 50% 70%,#5d6878 0%,#171d26 50%,#171d26 85%);border:1px solid #5d687855;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;padding:12px 16px 25px;margin-bottom:14px}
+.film-equipment img{width:100%;height:100%;object-fit:contain}
+.film-equipment small{position:absolute;bottom:6px;left:16px;color:var(--cyan);font:10px "Golos Text",sans-serif}
+.film-system{border-top:0;padding-top:0}
+.film-system>span{font-size:13px}
+.film-system h3{margin:8px 0;font-size:22px}
+.film-system p{font-size:14px}
+.film-systems{max-width:1160px;gap:24px;margin-top:24px}
+.is-scroll-film .film-scene-2 .film-copy{top:32px;transform:none!important}
+.film-scene-2 .film-copy h2{font-size:clamp(28px,3.3vw,48px)}
+.film-scene-2 .film-kicker{margin-bottom:16px}
+.film-scene-2 .film-lead{font-size:17px;margin-top:16px;max-width:850px}
+@media(max-width:700px){
+ .film-module-views{top:auto;bottom:130px;right:24px;width:calc(100% - 48px);height:240px}
+ .is-scroll-film .film-module-views{bottom:180px;height:25%}
+ .film-module-view{padding:8px}.film-module-view figcaption{font-size:10px;margin-top:3px}
+ .film-module-view img{height:calc(100% - 18px)}
+ .film-systems{gap:12px;margin-top:22px}
+ .film-system{grid-template-columns:70px 1fr;gap:3px 14px;min-height:62px;padding:0}
+ .film-equipment{grid-column:1;grid-row:1 / span 3;height:62px;padding:5px;margin:0}
+ .film-equipment small{display:none}
+ .film-system>span{display:none}
+ .film-system h3{grid-column:2;font-size:17px;margin:5px 0 0;align-self:center}
+ .film-system p{font-size:12px;grid-column:2}
+ .film-scene-2 .film-lead{display:none}
+ .is-scroll-film .film-scene-2 .film-copy{top:28px}
+}
+@media(min-height:450px) and (max-height:639px){
+ .film-equipment{height:90px;padding:8px 10px 22px;margin-bottom:8px}
+ .is-scroll-film .film-scene-2 .film-copy{top:16px}
+ .film-scene-2 .film-copy h2{font-size:28px}
+ .film-scene-2 .film-lead{display:none}
+ .film-scene-2 .film-kicker{margin-bottom:12px}
+ .film-system h3{font-size:17px}
+ .film-systems{margin-top:16px}
+}
+@media(min-height:450px) and (max-height:639px) and (max-width:700px){
+ .is-scroll-film .film-module-views{bottom:140px;height:22%}
+ .film-system{grid-template-columns:60px 1fr;min-height:48px}
+ .film-equipment{height:48px;padding:4px;margin:0}
+ .film-system h3{font-size:15px;margin:0}
+ .film-systems{gap:10px}
+ .film-scene-2 .film-copy h2{font-size:25px}
+}
+@media(min-height:450px) and (max-height:639px) and (max-width:700px){
+  .is-scroll-film .film-scene-1 .film-copy{top:16px}
+  .is-scroll-film .film-scene-1 .film-copy h2{font-size:23px}
+  .is-scroll-film .film-scene-1 .film-lead{font-size:13px;margin-top:10px}
+  .is-scroll-film .film-scene-1 .film-visual{bottom:152px;height:20%}
+  .is-scroll-film .film-scene-2 .film-lead{font-size:13px}
+}
+@media(max-width:380px) and (min-height:640px){
+  .is-scroll-film .film-scene-0 .film-copy{top:24%}
+  .is-scroll-film .film-scene-1 .film-copy{top:10px}
+  .is-scroll-film .film-scene-2 .film-copy{top:-45px}
+  .is-scroll-film .film-scene-3 .film-copy{top:26%}
+  .is-scroll-film .film-scene-4 .film-copy{top:26%}
+  .is-scroll-film .film-module-views{bottom:0;height:16%}
+}
+@media(max-width:380px) and (min-height:450px) and (max-height:639px){
+  .is-scroll-film .film-scene-2 .film-copy{top:-78px}
+  .is-scroll-film .film-scene-3 .film-copy,.is-scroll-film .film-scene-4 .film-copy{top:30px}
+}
+/* Selected project images fill the module and high-density scenes. */
+.scroll-film .film-scene-1 .film-visual{inset:0;width:100%;height:100%;object-fit:cover;object-position:65% center;background:transparent;border-radius:0}
+.scroll-film .film-scene-1 .film-shade{display:block;background:linear-gradient(90deg,#171d26eb 0%,#171d26b0 38%,#171d2625 75%),linear-gradient(0deg,#171d26d9,transparent 50%)}
+.scroll-film .film-scene-2 .film-shade{background:linear-gradient(90deg,#171d26ec 0%,#171d2690 55%,#171d2630),linear-gradient(0deg,#171d26dc,transparent 80%)}
+@media(max-width:700px){.scroll-film .film-scene-1 .film-copy{padding-bottom:140px}.is-scroll-film .film-scene-1 .film-copy{padding-bottom:0}}
+
+/* Unbounded needs a smaller measure on compact screens. */
+@media(max-width:380px){.scroll-film .film-copy h1,.scroll-film .film-copy h2{font-size:26px}.is-scroll-film .film-copy h1,.is-scroll-film .film-copy h2{font-size:26px}.visual-solution h3{font-size:22px}}
+@media(max-width:380px){.is-scroll-film .film-scene-2 .film-copy h2{font-size:23px}.is-scroll-film .film-system h3{font-size:15px}}
+@media(max-width:380px){.is-scroll-film .film-copy h1{font-size:22px}.is-scroll-film .film-scene-2 .film-copy h2{font-size:21px}.is-scroll-film .film-system h3{font-size:14px}}
+
+/* Hero typography and spacing: reserve clear space above the action row. */
+@media(min-width:1001px){
+ .scroll-film .film-copy{max-width:1080px}
+ .scroll-film .film-copy h1,.scroll-film .film-copy h2{font-size:clamp(36px,min(3.5vw,6.8svh),60px);line-height:1.14;letter-spacing:-.035em}
+ .scroll-film .film-kicker{margin-bottom:24px;font-size:12px;gap:20px}
+ .scroll-film .film-lead{font-size:clamp(17px,1.15vw,20px);line-height:1.55;max-width:610px;margin-top:24px}
+ .is-scroll-film .film-copy{top:40%}
+ .scroll-film .film-scene-1 .film-copy{max-width:850px}
+ .scroll-film .film-scene-2 .film-copy h2{font-size:clamp(30px,2.8vw,44px)}
+ .scroll-film .film-scene-2 .film-lead{font-size:17px;margin-top:18px}
+ .scroll-film .film-actions{gap:28px}
+ .scroll-film .film-actions .button{font-size:15px;line-height:1.4;padding:16px 24px;min-height:54px;gap:24px}
+ .scroll-film .film-skip{font-size:15px;padding:8px 0;gap:14px}
+}
+@media(min-width:1001px){.scroll-film .film-scene-2 .film-copy{max-width:none}.scroll-film .film-scene-2 .film-systems{margin-top:20px}.scroll-film .film-scene-2 .film-equipment{height:clamp(100px,16svh,150px)}}
+@media(min-width:1001px){.is-scroll-film .film-scene-2 .film-copy{top:24px}.scroll-film .film-scene-2 .film-equipment{height:clamp(90px,14svh,132px)}}
+@media(min-width:1001px) and (max-height:800px){.scroll-film .film-scene-2 .film-equipment{height:90px}.scroll-film .film-scene-2 .film-system h3{font-size:19px;margin:6px 0}.scroll-film .film-scene-2 .film-system p{font-size:13px}}
+
+/* Keep film support text readable in compact viewports. */
+.film-kicker>span,.film-note,.film-instruction,.film-step-label,.film-module-view figcaption,.film-equipment small{font-size:var(--type-caption)}
+:lang(kk) .scroll-film .film-copy h1,:lang(kk) .scroll-film .film-copy h2{letter-spacing:-.02em}
+@media(max-width:700px){.film-note,.film-instruction,.film-module-view figcaption{font-size:var(--type-caption)}}
+@media(min-height:450px) and (max-height:639px){.is-scroll-film .film-kicker,.is-scroll-film .film-note{font-size:var(--type-caption)}}
+
+/* Shared text rows keep every chapter aligned, including translated headings. */
+.scroll-film.is-scroll-film .film-scene .film-copy{
+ top:var(--film-copy-top,24px)!important;max-width:1080px;
+ transform:none!important;padding-bottom:0;
+}
+.scroll-film.is-scroll-film .film-scene .film-kicker{margin-bottom:24px}
+.scroll-film.is-scroll-film .film-scene .film-copy h1,
+.scroll-film.is-scroll-film .film-scene .film-copy h2{
+ font-size:clamp(36px,min(3.5vw,6.8svh),60px);line-height:1.14;
+ min-height:var(--film-heading-height,0px);
+}
+.scroll-film.is-scroll-film .film-scene .film-lead{
+ display:block;font-size:clamp(17px,1.15vw,20px);line-height:1.55;
+ max-width:610px;margin-top:24px;
+}
+@media(max-width:1000px){
+ .scroll-film.is-scroll-film .film-scene .film-copy h1,
+ .scroll-film.is-scroll-film .film-scene .film-copy h2{font-size:clamp(26px,4vw,36px)}
+}
+@media(max-width:700px){
+ .scroll-film.is-scroll-film .film-scene .film-copy{max-width:none}
+ .scroll-film.is-scroll-film .film-scene .film-copy h1,
+ .scroll-film.is-scroll-film .film-scene .film-copy h2{font-size:clamp(22px,6vw,36px);line-height:1.12}
+ .scroll-film.is-scroll-film .film-scene .film-kicker{margin-bottom:20px}
+ .scroll-film.is-scroll-film .film-scene .film-lead{font-size:17px;margin-top:20px}
+}
+@media(min-height:450px) and (max-height:639px){
+ .scroll-film.is-scroll-film .film-scene .film-kicker{margin-bottom:14px}
+ .scroll-film.is-scroll-film .film-scene .film-lead{font-size:14px;margin-top:14px}
+}
