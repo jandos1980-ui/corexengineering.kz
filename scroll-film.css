@@ -260,3 +260,8 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .scroll-film.is-scroll-film .film-scene .film-kicker{margin-bottom:14px}
  .scroll-film.is-scroll-film .film-scene .film-lead{font-size:14px;margin-top:14px}
 }
+
+/* Kinetic desktop panel wins over the compact mobile disclosure at tablet widths. */
+@media(min-width:701px) and (max-width:1250px){
+ .mobile-menu[open] nav.menu-content{display:block;position:fixed;right:0;top:var(--header-height);width:min(620px,48vw);height:calc(100dvh - var(--header-height));padding:0;overflow:hidden;background:var(--navy);border:0;box-shadow:none;z-index:101;gap:0}
+}
