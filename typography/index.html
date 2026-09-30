@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>CoreX — редактор типографии</title>
+  <link rel="icon" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="editor.css">
+  <script src="editor.js" defer></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="identity"><strong>CoreX <span>/ Типографика</span></strong><small>Локальная студия</small></div>
+    <label>Страница<select id="page"><option value="">Главная</option><option value="solutions/data-centers/">ЦОД под ключ</option><option value="solutions/modular/">Модульные ЦОД</option><option value="solutions/liquid-cooling/">Жидкостное охлаждение</option><option value="solutions/cooling/">Охлаждение</option><option value="solutions/power/">Электропитание</option><option value="solutions/monitoring/">Мониторинг</option><option value="solutions/service/">Сервис</option></select></label>
+    <label>Язык<select id="language"><option value="ru">RU</option><option value="kk">KK</option></select></label>
+    <label>Экран<select id="device"><option value="desktop">Компьютер</option><option value="mobile">Мобильный</option></select></label>
+    <button id="undo" disabled title="Ctrl / Cmd + Z">Отменить</button>
+    <button id="redo" disabled title="Ctrl / Cmd + Shift + Z">Повторить</button>
+    <button id="export" class="primary">Экспорт настроек</button>
+  </header>
+  <main class="workspace">
+    <section class="preview" aria-label="Предпросмотр сайта">
+      <div class="preview-bar"><span id="viewport-label">1536 × 960</span><label class="inline">Масштаб<select id="zoom"><option value="fit">По ширине</option><option value="1">100%</option><option value="0.75">75%</option><option value="0.5">50%</option></select></label><label class="inline"><input type="checkbox" id="inspect" checked> Выбирать текст кликом</label></div>
+      <div class="canvas" id="canvas"><div id="frame-wrap"><iframe id="site" title="Сайт CoreX — предпросмотр типографии"></iframe></div></div>
+      <div class="preview-note">Прокручивайте сайт и выбирайте текст. Чтобы открыть меню или FAQ, выключите выбор кликом.</div>
+    </section>
+    <aside class="inspector" aria-label="Параметры типографии">
+      <div class="panel-title"><h1>Текст</h1><span id="rule-count">0 настроек</span></div>
+      <label>Выбрать элемент<select id="elements"><option value="">Нажмите на текст в предпросмотре</option></select></label>
+      <div class="selection"><span id="tag">Ничего не выбрано</span><p id="selected-text">Выберите заголовок, абзац, ссылку или подпись.</p></div>
+      <label>Применять к<select id="scope"><option value="element">Этому элементу</option><option value="type">Всем элементам этого типа</option></select></label>
+      <p id="scope-note" class="hint">Настройки разделены по языку и размеру экрана.</p>
+      <fieldset class="font-replace" id="font-replace">
+        <legend>Заменить шрифт</legend>
+        <div class="pair"><label>Заменить<select id="replace-source"><option value="">Выберите шрифт</option><option value="unbounded">Unbounded</option><option value="golos">Golos Text</option></select></label><label>На<select id="replace-target"><option value="">Выберите шрифт</option><option value="Unbounded">Unbounded</option><option value="Golos Text">Golos Text</option></select></label></div>
+        <label>Область замены<select id="replace-scope"><option value="language">Все страницы языка</option><option value="page">Только эта страница</option></select></label>
+        <p id="replace-note" class="hint">Выберите оба шрифта — замена сразу появится в предпросмотре.</p>
+        <button id="reset-font-replace" disabled>Сбросить замену шрифта</button>
+      </fieldset>
+      <fieldset id="controls" disabled>
+        <legend>Параметры текста</legend>
+        <label>Шрифт<select id="font-family" data-prop="font-family"><option value="">Как на сайте</option><option value="Golos Text">Golos Text</option><option value="Unbounded">Unbounded · русский</option></select></label>
+        <label>Цвет текста<input id="color" data-prop="color" type="color" value="#171d26"></label>
+        <div class="pair"><label>Размер, px<input id="font-size" data-prop="font-size" type="number" min="8" max="160" step="1"></label><label>Начертание<select id="font-weight" data-prop="font-weight"><option value="400">Обычное · 400</option><option value="500">Среднее · 500</option><option value="600">Полужирное · 600</option><option value="700">Жирное · 700</option></select></label></div>
+        <div class="pair"><label>Межстрочный, %<input id="line-height" data-prop="line-height" type="number" min="70" max="300" step="1"></label><label>Межбуквенный, px<input id="letter-spacing" data-prop="letter-spacing" type="number" min="-10" max="30" step="0.1"></label></div>
+        <label>Выравнивание<select id="text-align" data-prop="text-align"><option value="start">По началу строки</option><option value="left">По левому краю</option><option value="center">По центру</option><option value="right">По правому краю</option></select></label>
+        <div class="divider"></div>
+        <label>Максимальная ширина, px<input id="max-width" data-prop="max-width" type="number" min="40" max="2400" step="1" placeholder="Автоматически"></label>
+        <div class="pair"><label>Отступ сверху, px<input id="margin-top" data-prop="margin-top" type="number" min="0" max="300" step="1"></label><label>Отступ снизу, px<input id="margin-bottom" data-prop="margin-bottom" type="number" min="0" max="300" step="1"></label></div>
+        <p class="hint">Высота подстраивается под текст. Пустое числовое поле возвращает исходное значение этого параметра.</p>
+      </fieldset>
+      <p id="warning" class="warning" hidden></p>
+      <button id="reset-selection" disabled>Сбросить выбранную настройку</button>
+      <div class="save-state"><span class="dot"></span><span id="status" role="status" aria-live="polite">Черновик хранится в этом браузере</span></div>
+      <details class="export-help"><summary>Сохранение и применение</summary><p>Экспорт настроек скачивает JSON со всеми изменениями RU/KK, всех страниц и экранов. Передайте его в этот чат, чтобы применить результат к сайту.</p><button id="export-css">CSS текущей страницы</button><p>CSS содержит настройки обоих экранов для выбранной страницы и языка. Подключается после остальных стилей.</p></details>
+      <button id="reset-all" class="quiet">Сбросить весь черновик</button>
+    </aside>
+  </main>
+  <dialog id="reset-dialog"><h2>Сбросить весь черновик?</h2><p>Все ваши настройки в редакторе будут удалены. После сброса можно нажать «Отменить».</p><form method="dialog"><button value="cancel">Оставить</button><button value="reset" class="primary">Сбросить</button></form></dialog>
+</body>
+</html>

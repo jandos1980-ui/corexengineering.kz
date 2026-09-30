@@ -285,5 +285,55 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .scroll-film .film-scene .film-shade{
   background:linear-gradient(90deg,#171d26b8,#171d2699 65%,#171d2633),linear-gradient(0deg,#171d26cc,transparent 55%);
  }
- .scroll-film .film-scene-4 .film-visual{object-position:85% center}
+.scroll-film .film-scene-4 .film-visual{object-position:85% center}
+}
+
+/* Mobile composition: dedicated portrait sources, independently paced story. */
+@media(max-width:700px){
+ :root{--header-height:calc(64px + env(safe-area-inset-top,0px))}
+ body{padding-top:var(--header-height)}
+ .contact-grid>*,.form-row>*{min-width:0}
+ form .button{min-width:0;width:100%;gap:12px;text-align:left}
+ .header,.home-header{position:fixed;inset:0 0 auto;height:var(--header-height);z-index:110;background:var(--navy)!important;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+ .header .brand,.header .language{min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+ .kinetic-menu summary{min-width:44px;min-height:44px;border:0;padding:8px}
+ .kinetic-menu .menu-caret{font-size:0;width:22px;height:16px;border-top:2px solid;border-bottom:2px solid;position:relative;transform:none}
+ .kinetic-menu .menu-caret:after{content:'';position:absolute;left:0;right:0;top:5px;border-top:2px solid}
+ .kinetic-menu[open] .menu-caret{border-bottom:0;transform:translateY(7px) rotate(45deg)}
+ .kinetic-menu[open] .menu-caret:after{top:-2px;transform:rotate(90deg)}
+ .kinetic-menu nav.menu-content{max-width:100vw;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
+ .kinetic-menu .menu-content-wrapper{height:auto;min-height:100%;padding:24px}
+ :lang(kk) .kinetic-menu .nav-link{font-family:'Golos Text',sans-serif}
+ .scroll-film.is-scroll-film{height:320svh}
+ .is-scroll-film .film-stage{height:calc(100svh - var(--header-height));min-height:0}
+ .scroll-film .film-scene .film-visual{object-position:center;transform-origin:center}
+ .scroll-film .film-scene .film-shade{background:linear-gradient(0deg,#171d26f2 0%,#171d2699 28%,#171d2610 65%)}
+ .scroll-film .film-kicker,.scroll-film .film-lead{display:block}
+ .scroll-film.is-scroll-film .film-scene .film-kicker{font-size:12px;margin-bottom:12px}
+ .scroll-film.is-scroll-film .film-scene .film-lead{font-size:16px;line-height:1.45;margin-top:12px}
+ .scroll-film.is-scroll-film .film-scene .film-copy{top:auto!important;bottom:158px;padding:0 24px}
+ .scroll-film.is-scroll-film .film-scene .film-copy h1,.scroll-film.is-scroll-film .film-scene .film-copy h2{font-size:clamp(22px,6vw,32px);min-height:0;line-height:1.2}
+ .is-scroll-film .film-actions{bottom:78px;left:24px;right:24px;gap:8px;flex-wrap:nowrap;justify-content:space-between}
+ .film-actions .button{font-size:14px;min-height:48px;padding:12px 16px;gap:8px}
+ .film-skip{font-size:12px;min-height:44px;gap:4px}
+ .scroll-film[data-chapter='2'] .film-actions .button,.scroll-film[data-chapter='3'] .film-actions .button,.scroll-film[data-chapter='4'] .film-actions .button{visibility:hidden}
+ .is-scroll-film .film-footer{bottom:16px;left:24px;right:24px}
+ .film-instruction{display:block;font-size:12px;margin-bottom:8px}
+ .film-step-label{display:none}
+ .scroll-film .film-note{display:none}
+ .scroll-film:not(.is-scroll-film) .film-scene{min-height:420px}
+ .scroll-film:not(.is-scroll-film) .film-copy{padding:240px 24px 32px;max-width:none}
+ .scroll-film:not(.is-scroll-film) .film-copy h1,.scroll-film:not(.is-scroll-film) .film-copy h2{font-size:26px}
+ .scroll-film:not(.is-scroll-film) .film-actions{padding:20px 24px}
+ @media(prefers-reduced-motion:reduce){.scroll-film .film-scene:not(:first-child){display:none}}
+}
+
+/* Initial hero entrance; the scroll controller retains ownership of scene fades. */
+@keyframes corex-hero-enter{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){
+  .film-entering .film-scene:first-child .film-copy>*,
+  .film-entering .film-actions{animation:corex-hero-enter 450ms var(--ease-out) both}
+  .film-entering .film-scene:first-child .film-copy>:nth-child(2){animation-delay:60ms}
+  .film-entering .film-scene:first-child .film-copy>:nth-child(3){animation-delay:120ms}
+  .film-entering .film-actions{animation-delay:180ms}
 }

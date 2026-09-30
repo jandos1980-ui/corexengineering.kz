@@ -1,4 +1,53 @@
 'use strict';
+// One-time entrances for explanatory groups. Content stays visible without JS.
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  if (!('IntersectionObserver' in window) || reduced.matches) return;
+  const selector = '.task-scenario, .about-items > div, .scope-grid > article';
+  const pending = new Set(document.querySelectorAll(selector));
+  const arriving = new Set();
+  let keyboard = false;
+  const finish = element => {
+    element.classList.remove('content-arriving');
+    element.style.removeProperty('--arrival-delay');
+    arriving.delete(element);
+  };
+  const observer = new IntersectionObserver(entries => {
+    const groups = new Map();
+    entries.filter(entry => entry.isIntersecting).forEach(({target}) => {
+      observer.unobserve(target);
+      pending.delete(target);
+      if (keyboard || reduced.matches || target.contains(document.activeElement)) return;
+      const index = groups.get(target.parentElement) || 0;
+      groups.set(target.parentElement, index + 1);
+      target.style.setProperty('--arrival-delay', `${Math.min(index, 3) * 60}ms`);
+      arriving.add(target);
+      target.classList.add('content-arriving');
+      target.addEventListener('animationend', event => {
+        if (event.target === target) finish(target);
+      }, {once:true});
+    });
+  }, {threshold:.15});
+  pending.forEach(element => observer.observe(element));
+  document.addEventListener('keydown', () => {
+    keyboard = true;
+    arriving.forEach(finish);
+  }, {capture:true});
+  document.addEventListener('pointerdown', () => { keyboard = false; }, {passive:true});
+  document.addEventListener('focusin', event => {
+    const element = event.target.closest(selector);
+    if (!element) return;
+    observer.unobserve(element);
+    pending.delete(element);
+    finish(element);
+  });
+  reduced.addEventListener('change', () => {
+    if (!reduced.matches) return;
+    observer.disconnect();
+    pending.clear();
+    arriving.forEach(finish);
+  });
+})();
 const form=document.querySelector('#project-form');
 if(form){
   const baseSubject=form.dataset.subject;
@@ -20,7 +69,24 @@ if(form){
     document.querySelector('#mail-link').focus({preventScroll:true});
   });
 }
-document.querySelectorAll('.mobile-menu nav a').forEach(link=>link.addEventListener('click',()=>link.closest('details').removeAttribute('open')));
+document.querySelectorAll('.mobile-menu nav a').forEach(link=>link.addEventListener('click',()=>{link.closest('details').removeAttribute('open');}));
+
+// Keep keyboard focus inside the open navigation and restore it on dismissal.
+document.querySelectorAll('.mobile-menu').forEach(menu=>{
+  const trigger=menu.querySelector('summary');
+  const links=[...menu.querySelectorAll('nav a')];
+  menu.addEventListener('toggle',()=>{
+    if(menu.open) links[0]?.focus({preventScroll:true});
+    else if(menu.contains(document.activeElement)&&document.activeElement!==trigger) trigger.focus({preventScroll:true});
+  });
+  menu.querySelector('.menu-overlay')?.addEventListener('click',()=>{menu.open=false;});
+  menu.addEventListener('keydown',event=>{
+    if(!menu.open||event.key!=='Tab')return;
+    const items=[trigger,...links];
+    if(event.shiftKey&&document.activeElement===items[0]){event.preventDefault();items.at(-1).focus();}
+    else if(!event.shiftKey&&document.activeElement===items.at(-1)){event.preventDefault();trigger.focus();}
+  });
+});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){const menu=document.querySelector('.mobile-menu[open]');if(menu){menu.removeAttribute('open');menu.querySelector('summary').focus();}}});
 // The home header is transparent over the complete scroll film, then gains its
 // solid surface only when the first content section reaches it.

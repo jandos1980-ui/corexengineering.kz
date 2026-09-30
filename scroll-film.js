@@ -82,7 +82,7 @@
     }
     // All overlaid scene assets must be ready before their first scroll reveal.
     images.filter(Boolean).forEach(img => { img.loading = 'eager'; });
-    header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'));
+    header = document.querySelector('.header')?.getBoundingClientRect().height || 0;
     // Reserve the tallest heading so both titles and descriptions share a row.
     root.style.removeProperty('--film-heading-height');
     const headingHeight = Math.max(...copies.map(copy => copy.querySelector('h1,h2').getBoundingClientRect().height));
@@ -104,4 +104,22 @@
   narrow.addEventListener('change', configure);
   configure();
   document.fonts.ready.then(configure);
+  // Entrance belongs to the initial view only; scrolling immediately takes over.
+  if (enabled && scrollY < 8 && !location.hash) {
+    const finishEntrance = () => {
+      root.classList.remove('film-entering');
+      removeEventListener('scroll', finishEntrance);
+      removeEventListener('keydown', finishEntrance);
+      removeEventListener('resize', finishEntrance);
+      root.removeEventListener('focusin', finishEntrance);
+      reduced.removeEventListener('change', finishEntrance);
+    };
+    root.classList.add('film-entering');
+    addEventListener('scroll', finishEntrance, {passive:true});
+    addEventListener('keydown', finishEntrance);
+    addEventListener('resize', finishEntrance, {passive:true});
+    root.addEventListener('focusin', finishEntrance);
+    reduced.addEventListener('change', finishEntrance);
+    setTimeout(finishEntrance, 700);
+  }
 })();
