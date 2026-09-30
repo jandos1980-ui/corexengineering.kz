@@ -266,8 +266,8 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .mobile-menu[open] nav.menu-content{display:block;position:fixed;right:0;top:var(--header-height);width:min(620px,48vw);height:calc(100dvh - var(--header-height));padding:0;overflow:hidden;background:var(--navy);border:0;box-shadow:none;z-index:101;gap:0}
 }
 
-/* Home only: the first film scene owns the background. The header becomes
-   solid at the beginning of the content that follows it. */
+/* Home only: the first four film scenes own the background. The header
+   becomes solid as the final "next step" scene enters. */
 @media(min-width:701px){
  :root{--header-height:65px}
  .home-header{position:fixed;left:0;right:0;top:0;width:100%;height:var(--header-height);background-color:transparent!important;border-color:transparent!important;box-shadow:none!important;transition:background-color 240ms var(--ease-out),border-color 240ms var(--ease-out),box-shadow 240ms var(--ease-out)}

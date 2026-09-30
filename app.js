@@ -1,4 +1,12 @@
 'use strict';
+// Keep the QSC card as a concise proof point, leaving room for its visual field.
+(() => {
+  const copy = document.querySelector('.team-company-content p');
+  if (!copy) return;
+  copy.textContent = document.documentElement.lang === 'kk'
+    ? 'Coolnet авторизациясы расталған: CoreX Engineering өндіруші регламенттері бойынша сервис көрсетеді.'
+    : 'Авторизация Coolnet подтверждает: CoreX Engineering выполняет сервис по регламентам производителя.';
+})();
 // One-time entrances for explanatory groups. Content stays visible without JS.
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -88,15 +96,22 @@ document.querySelectorAll('.mobile-menu').forEach(menu=>{
   });
 });
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){const menu=document.querySelector('.mobile-menu[open]');if(menu){menu.removeAttribute('open');menu.querySelector('summary').focus();}}});
-// The home header is transparent over the complete scroll film, then gains its
-// solid surface only when the first content section reaches it.
+// The home header is transparent through the first four film chapters, then
+// gains its solid surface as the final "next step" chapter enters.
 (()=>{
   const film=document.querySelector('.scroll-film');
   const header=document.querySelector('.header');
-  const next=document.querySelector('#solutions');
-  if(!film||!header||!next)return;
+  const stage=film?.querySelector('.film-stage');
+  if(!film||!header||!stage)return;
   let frame=0;
-  const render=()=>{frame=0;header.classList.toggle('is-solid',next.getBoundingClientRect().top<=header.offsetHeight);};
+  const render=()=>{
+    frame=0;
+    const offset=film.getBoundingClientRect().top+scrollY;
+    const travel=Math.max(1,film.offsetHeight-stage.offsetHeight);
+    const progress=Math.max(0,Math.min(1,(scrollY+header.offsetHeight-offset)/travel));
+    // The fifth scene begins its crossfade at 3.74 of five chapters.
+    header.classList.toggle('is-solid',progress>=.748);
+  };
   const schedule=()=>{if(!frame)frame=requestAnimationFrame(render);};
   addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});render();
 })();
