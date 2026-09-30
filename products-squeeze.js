@@ -47,7 +47,7 @@
   panel.append(label,heading,summary);
     if(hasStructure){
       const toggle=document.createElement('button');toggle.type='button';toggle.className='sq-structure';toggle.setAttribute('aria-pressed','false');toggle.textContent=kk?'Құрылымын көрсету':'Показать устройство';
-      toggle.addEventListener('click',()=>{const opened=tab.classList.toggle('sq-open');toggle.setAttribute('aria-pressed',String(opened));toggle.textContent=opened?(kk?'Жинау':'Собрать'):(kk?'Құрылымын көрсету':'Показать устройство');});panel.append(toggle);
+      toggle.addEventListener('click',()=>{const opened=tab.classList.toggle('sq-open');toggle.setAttribute('aria-pressed',String(opened));toggle.textContent=opened?(kk?'Жинау':'Собрать'):(kk?'Құрылымын көрсету':'Показать устройство');window.CorexButtons?.enhance(toggle);});panel.append(toggle);
     }
     panel.append(link);
     const motion=document.createElement('div');motion.className='sq-content-motion';

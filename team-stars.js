@@ -687,36 +687,37 @@ const createStarController = (
 };
 
 
-const host = document.querySelector('.unified-team-company');
-const canvas = host?.querySelector('.team-stars');
-if (!host || !canvas) return;
-const controller = createStarController(canvas);
-if (!controller) return;
-const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-const [base, cool, warm] = resolveCssColors([DEFAULT_COLOR, TINT_COOL, TINT_WARM], host);
-let visible = false;
-const configure = () => {
-  controller.setSettings({connect:true,connectDistance:120,count:240,drag:DEFAULT_DRAG,glow:DEFAULT_GLOW,gravity:DEFAULT_GRAVITY,palette:{base,cool,warm},speed:DEFAULT_SPEED,starSize:DEFAULT_STAR_SIZE,still:reduced.matches,tint:0.65,twinkle:DEFAULT_TWINKLE});
-  controller.render();
-};
-const sync = () => {
-  controller.setRunning(visible && !document.hidden && !reduced.matches);
-  if (reduced.matches) controller.render();
-};
-const observer = new IntersectionObserver(entries => {visible=entries.some(entry=>entry.isIntersecting);sync();});
-observer.observe(host);
-const resize = new ResizeObserver(()=>controller.resize());
-resize.observe(canvas);
-host.addEventListener('pointermove',event=>{
-  if (reduced.matches) return;
-  const rect=canvas.getBoundingClientRect();
-  controller.setPointer(event.clientX-rect.left,event.clientY-rect.top,true);
-},{passive:true});
-const leave=()=>controller.setPointer(0,0,false);
-host.addEventListener('pointerleave',leave);
-host.addEventListener('pointercancel',leave);
-document.addEventListener('visibilitychange',sync);
-reduced.addEventListener('change',()=>{leave();configure();sync();});
-configure();
+document.querySelectorAll('.unified-team-company, .detail-hero').forEach(host => {
+  const canvas = host.querySelector('.team-stars');
+  if (!canvas) return;
+  const controller = createStarController(canvas);
+  if (!controller) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const [base, cool, warm] = resolveCssColors([DEFAULT_COLOR, TINT_COOL, TINT_WARM], host);
+  let visible = false;
+  const configure = () => {
+    controller.setSettings({connect:true,connectDistance:120,count:240,drag:DEFAULT_DRAG,glow:DEFAULT_GLOW,gravity:DEFAULT_GRAVITY,palette:{base,cool,warm},speed:DEFAULT_SPEED,starSize:DEFAULT_STAR_SIZE,still:reduced.matches,tint:0.65,twinkle:DEFAULT_TWINKLE});
+    controller.render();
+  };
+  const sync = () => {
+    controller.setRunning(visible && !document.hidden && !reduced.matches);
+    if (reduced.matches) controller.render();
+  };
+  const observer = new IntersectionObserver(entries => {visible=entries.some(entry=>entry.isIntersecting);sync();});
+  observer.observe(host);
+  const resize = new ResizeObserver(()=>controller.resize());
+  resize.observe(canvas);
+  host.addEventListener('pointermove',event=>{
+    if (reduced.matches) return;
+    const rect=canvas.getBoundingClientRect();
+    controller.setPointer(event.clientX-rect.left,event.clientY-rect.top,true);
+  },{passive:true});
+  const leave=()=>controller.setPointer(0,0,false);
+  host.addEventListener('pointerleave',leave);
+  host.addEventListener('pointercancel',leave);
+  document.addEventListener('visibilitychange',sync);
+  reduced.addEventListener('change',()=>{leave();configure();sync();});
+  configure();
+});
 
 })();

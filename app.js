@@ -83,9 +83,16 @@ document.querySelectorAll('.mobile-menu nav a').forEach(link=>link.addEventListe
 document.querySelectorAll('.mobile-menu').forEach(menu=>{
   const trigger=menu.querySelector('summary');
   const links=[...menu.querySelectorAll('nav a')];
+  let openedByHover=false;
+  // Hover opens the desktop menu without moving keyboard focus.
+  trigger.addEventListener('pointerenter',event=>{
+    if(event.pointerType!=='mouse'||!matchMedia('(min-width:701px) and (hover:hover)').matches)return;
+    if(!menu.open){openedByHover=true;menu.open=true;}
+  });
   menu.addEventListener('toggle',()=>{
-    if(menu.open) links[0]?.focus({preventScroll:true});
+    if(menu.open&&!openedByHover) links[0]?.focus({preventScroll:true});
     else if(menu.contains(document.activeElement)&&document.activeElement!==trigger) trigger.focus({preventScroll:true});
+    openedByHover=false;
   });
   menu.querySelector('.menu-overlay')?.addEventListener('click',()=>{menu.open=false;});
   menu.addEventListener('keydown',event=>{

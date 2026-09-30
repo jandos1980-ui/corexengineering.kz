@@ -1,0 +1,118 @@
+/* Shared rectangular shape, including the native no-JavaScript controls. */
+:root { --button-radius: 6px; }
+body :is(.button, .product-catalog, .sq-action, .sq-controls button, .sq-structure, .mobile-menu > summary) {
+  border-radius: var(--button-radius) !important;
+}
+body .interactive-hover-button {
+  --button-fill: #fff;
+  --button-active-text: var(--blue, #2458e6);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  max-width: 100%;
+  padding-inline: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+body .interactive-hover-button:is(.button, .product-catalog, .sq-action, .sq-structure) {
+  padding-inline: 30px 70px;
+}
+@media (min-width: 701px) {
+  body .scroll-film .film-actions .button.interactive-hover-button {
+    min-width: 264px;
+    padding-inline: 30px 70px;
+  }
+}
+body .interactive-hover-button:hover { transform: none; }
+body .interactive-hover-button:focus-visible {
+  outline: 2px solid var(--blue-text, #0b78eb);
+  outline-offset: 4px;
+}
+body .interactive-hover-button::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border: 1px solid var(--blue, #2458e6);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+.interactive-hover-button > .ihb-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+  transform: translateX(4px);
+}
+.interactive-hover-button > .ihb-active {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  white-space: nowrap;
+  padding: inherit;
+  padding-inline: 20px;
+  color: var(--button-active-text);
+  opacity: 0;
+  transform: translateX(48px);
+  pointer-events: none;
+}
+.ihb-active > span:first-child { flex: 0 0 auto; }
+.ihb-arrow { flex: 0 0 24px; width: 24px; height: 24px; }
+.interactive-hover-button > .ihb-fill {
+  position: absolute;
+  z-index: 0;
+  /* Fixed inset keeps the original leading dot clear of longer RU/KK labels. */
+  left: 14px;
+  top: 40%;
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  background: var(--button-fill);
+  pointer-events: none;
+}
+body .sq-controls .interactive-hover-button { padding: 0; background: #2458e612; }
+.interactive-hover-button.ihb-icon {
+  --button-fill: var(--blue, #2458e6);
+  --button-active-text: #fff;
+}
+.interactive-hover-button.ihb-icon > .ihb-label { transform: none; }
+.interactive-hover-button.ihb-icon > .ihb-active { padding: 0; }
+.interactive-hover-button.ihb-icon > .ihb-fill { left: 4px; width: 4px; height: 4px; top: calc(50% - 2px); }
+body .sq-structure.interactive-hover-button { border: 1px solid #0b78eb55; padding: 10px 28px; }
+@media (hover: hover) and (pointer: fine) {
+  .interactive-hover-button > :is(.ihb-label, .ihb-active, .ihb-fill) {
+    transition: transform 300ms cubic-bezier(.4, 0, .2, 1), opacity 300ms cubic-bezier(.4, 0, .2, 1);
+  }
+  .interactive-hover-button > .ihb-fill {
+    transition: left 300ms cubic-bezier(.4, 0, .2, 1), top 300ms cubic-bezier(.4, 0, .2, 1), width 300ms cubic-bezier(.4, 0, .2, 1), height 300ms cubic-bezier(.4, 0, .2, 1), transform 300ms cubic-bezier(.4, 0, .2, 1), background-color 300ms cubic-bezier(.4, 0, .2, 1);
+  }
+  body .interactive-hover-button::after { transition: opacity 300ms cubic-bezier(.4, 0, .2, 1); }
+  body .interactive-hover-button:is(:hover, :focus-visible) > .ihb-label { transform: translateX(48px); opacity: 0; }
+  body .interactive-hover-button:is(:hover, :focus-visible) > .ihb-active { transform: translateX(0); opacity: 1; }
+  body .interactive-hover-button:is(:hover, :focus-visible) > .ihb-fill { left: 0; top: 0; width: 100%; height: 100%; transform: scale(1.8); }
+  body .interactive-hover-button:not(.ihb-icon):is(:hover, :focus-visible) > .ihb-fill { background-color: transparent; }
+  body .interactive-hover-button:is(:hover, :focus-visible)::after { opacity: 1; }
+  /* Keep the starting surface stable while the dot expands over it. */
+  body .sq-action.interactive-hover-button:is(:hover, :focus-visible),
+  body .product-catalog.interactive-hover-button:is(:hover, :focus-visible),
+  body .blue.interactive-hover-button:is(:hover, :focus-visible) { background: rgb(255 255 255 / 12%); }
+}
+@media (max-width: 700px) {
+  body .interactive-hover-button { padding-inline: 26px; }
+  body .sq-controls .interactive-hover-button { padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .interactive-hover-button > :is(.ihb-label, .ihb-active, .ihb-fill) { transition: none; }
+}
