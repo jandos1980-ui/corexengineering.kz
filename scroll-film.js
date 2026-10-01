@@ -29,6 +29,8 @@
   function render() {
     frame = 0;
     if (!enabled) return;
+    const bounds = root.getBoundingClientRect();
+    root.classList.toggle('film-in-view', bounds.top < innerHeight && bounds.bottom > header);
     const p = clamp((scrollY + header - offset) / travel);
     // Each chapter holds, then dissolves over the last 26% of its interval.
     const chapter = p * scenes.length;
@@ -77,6 +79,7 @@
     frame = 0;
     enabled = !reduced.matches && !short.matches;
     root.classList.toggle('is-scroll-film', enabled);
+    if (!enabled) root.classList.remove('film-in-view');
     active = -1;
     if (!enabled) {
       root.style.removeProperty('--film-copy-top');

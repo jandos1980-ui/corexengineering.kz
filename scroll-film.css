@@ -317,8 +317,9 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .film-actions .button{width:100%;font-size:14px;min-height:48px;padding:12px 16px;gap:8px}
  .film-skip{font-size:13px;min-height:44px;gap:8px;justify-content:center;white-space:nowrap;text-align:center}
  .scroll-film[data-chapter='2'] .film-actions .button,.scroll-film[data-chapter='3'] .film-actions .button,.scroll-film[data-chapter='4'] .film-actions .button{visibility:hidden}
- .is-scroll-film .film-footer{top:12px;bottom:auto;left:24px;right:24px;display:flex;flex-direction:column-reverse;align-items:stretch;gap:8px}
- .film-instruction{display:block;font-size:12px;margin:0}
+ .is-scroll-film .film-footer{position:fixed;top:calc(var(--header-height) + 12px);bottom:auto;left:24px;right:24px;display:flex;flex-direction:column-reverse;align-items:stretch;gap:8px;visibility:hidden;pointer-events:none}
+ .scroll-film.is-scroll-film.film-in-view .film-footer{visibility:visible}
+ .film-instruction{display:block;font-size:12px;margin:0;text-align:center}
  .is-scroll-film .film-progress{flex:none}
  .film-step-label{display:none}
  .scroll-film .film-note{display:none}
