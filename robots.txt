@@ -1,5 +1,2 @@
 User-agent: *
 Allow: /
-Disallow: /typography/
-
-Sitemap: https://jandos1980-ui.github.io/corexengineering.kz/sitemap.xml

@@ -29,15 +29,15 @@
   const galleries=[];
   const galleryCounts={'cooling':1,'cool-row':2,'metarack':3,'metarow':3,'metacube':4,'ups':2,'monitoring':3,'distribution':3,'metarack-computing':3};
   slides.forEach((slide,i)=>{
-    slide.image.loading='eager';
+    slide.image.loading='lazy';
     const tab=document.createElement('button');tab.type='button';tab.className='sq-tab';tab.id=`sq-tab-${i}`;tab.setAttribute('role','tab');tab.setAttribute('aria-label',slide.title);tab.setAttribute('aria-controls',`sq-panel-${i}`);
     const picture=document.createElement('span');picture.className='sq-picture'+(slide.image.getAttribute('src').includes('monitoring')?' sq-picture-screen':'');picture.append(slide.image);
-    const key=slide.image.getAttribute('src').split('/').pop().replace('catalog-','').replace('.png','');
+    const key=slide.image.getAttribute('src').split('/').pop().replace('catalog-','').replace(/\.(png|webp)(?:\?.*)?$/,'');
     const imageMotion=document.createElement('span');imageMotion.className='sq-image-motion';
     const images=Array.from({length:galleryCounts[key]||1},(_,j)=>{
       const img=slide.image.cloneNode(true);
-      img.src=new URL(key==='metarow'&&j===1?'gallery-metarow-2-cutout.png':`gallery-${key}-${j+1}.webp?v=cutout-1`,slide.image.src).href;
-      img.width=1000;img.height=760;img.loading='eager';img.alt='';img.setAttribute('aria-hidden','true');
+      img.src=new URL(key==='metarow'&&j===1?'gallery-metarow-2-cutout.webp':`gallery-${key}-${j+1}.webp?v=cutout-1`,slide.image.src).href;
+      img.width=1000;img.height=760;img.loading='lazy';img.alt='';img.setAttribute('aria-hidden','true');
       img.className='sq-gallery-frame'+(j===0?' is-current':'');imageMotion.append(img);return img;
     });
     picture.replaceChildren(imageMotion);
