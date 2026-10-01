@@ -1,5 +1,13 @@
 # corexengineering.kz
 
+## Установка на сервер клиента
+
+Готовая сборка для https://corexengineering.kz/: [скачать corex-site.zip](https://github.com/jandos1980-ui/corexengineering.kz/releases/latest/download/corex-site.zip).
+
+Скачивайте файл **corex-site.zip** из Assets релиза. Автоматический **Source code (zip)** содержит демонстрационную версию с noindex и не предназначен для запуска основного домена без подготовки.
+
+В клиентском архиве: папка `site/` для web root, `INSTALL.md`, версия исходников и контрольные суммы. [Инструкция установки](release/INSTALL.md). Сборка архива разработчиком: `python release/build_release.py --output ../output/client-release/corex-site.zip` (Python 3.9+). На сервере клиента Python не требуется.
+
 ## Публикация клиентского сайта
 
 GitHub Pages автоматически публикует ветку `main`, каталог `/`:
