@@ -333,7 +333,7 @@ const createStarController = (
 
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth <= 700 ? 1 : MAX_DPR);
     const previousWidth = width;
     const previousHeight = height;
     width = Math.max(1, rect.width);
@@ -693,10 +693,11 @@ document.querySelectorAll('.unified-team-company, .detail-hero').forEach(host =>
   const controller = createStarController(canvas);
   if (!controller) return;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = matchMedia('(max-width: 700px)');
   const [base, cool, warm] = resolveCssColors([DEFAULT_COLOR, TINT_COOL, TINT_WARM], host);
   let visible = false;
   const configure = () => {
-    controller.setSettings({connect:true,connectDistance:120,count:240,drag:DEFAULT_DRAG,glow:DEFAULT_GLOW,gravity:DEFAULT_GRAVITY,palette:{base,cool,warm},speed:DEFAULT_SPEED,starSize:DEFAULT_STAR_SIZE,still:reduced.matches,tint:0.65,twinkle:DEFAULT_TWINKLE});
+    controller.setSettings({connect:true,connectDistance:120,count:mobile.matches ? 100 : 240,drag:DEFAULT_DRAG,glow:DEFAULT_GLOW,gravity:DEFAULT_GRAVITY,palette:{base,cool,warm},speed:DEFAULT_SPEED,starSize:DEFAULT_STAR_SIZE,still:reduced.matches,tint:0.65,twinkle:DEFAULT_TWINKLE});
     controller.render();
   };
   const sync = () => {
@@ -717,6 +718,7 @@ document.querySelectorAll('.unified-team-company, .detail-hero').forEach(host =>
   host.addEventListener('pointercancel',leave);
   document.addEventListener('visibilitychange',sync);
   reduced.addEventListener('change',()=>{leave();configure();sync();});
+  mobile.addEventListener('change',()=>{controller.resize();configure();});
   configure();
 });
 

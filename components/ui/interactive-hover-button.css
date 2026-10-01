@@ -19,13 +19,15 @@ body .interactive-hover-button {
   cursor: pointer;
 }
 body .interactive-hover-button:is(.button, .product-catalog, .sq-action, .sq-structure) {
-  padding-inline: 30px 70px;
+  padding-inline: 34px 20px;
 }
 @media (min-width: 701px) {
   body .scroll-film .film-actions .button.interactive-hover-button {
-    min-width: 264px;
-    padding-inline: 30px 70px;
+    min-width: 0;
+    width: max-content;
+    padding-inline: 34px 20px;
   }
+  body .scroll-film .film-actions .button .ihb-active { padding-inline: 8px; }
 }
 body .interactive-hover-button:hover { transform: none; }
 body .interactive-hover-button:focus-visible {
@@ -50,7 +52,7 @@ body .interactive-hover-button::after {
   justify-content: center;
   gap: 10px;
   min-width: 0;
-  transform: translateX(4px);
+  transform: translateX(2px);
 }
 .interactive-hover-button > .ihb-active {
   position: absolute;
@@ -73,9 +75,9 @@ body .interactive-hover-button::after {
 .interactive-hover-button > .ihb-fill {
   position: absolute;
   z-index: 0;
-  /* Fixed inset keeps the original leading dot clear of longer RU/KK labels. */
-  left: 14px;
-  top: 40%;
+  /* Center the dot and label together, including full-width mobile buttons. */
+  left: calc(50% - var(--ihb-label-width, 0px) / 2 - 9px);
+  top: calc(50% - 4px);
   width: 8px;
   height: 8px;
   border-radius: 8px;
@@ -91,6 +93,45 @@ body .sq-controls .interactive-hover-button { padding: 0; background: #2458e612;
 .interactive-hover-button.ihb-icon > .ihb-active { padding: 0; }
 .interactive-hover-button.ihb-icon > .ihb-fill { left: 4px; width: 4px; height: 4px; top: calc(50% - 2px); }
 body .sq-structure.interactive-hover-button { border: 1px solid #0b78eb55; padding: 10px 28px; }
+/* Keep the dot and copy as one balanced group in the product detail CTA. */
+body .sq-panel .sq-action.interactive-hover-button {
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  padding-inline: 34px 20px;
+  white-space: nowrap;
+  text-align: center;
+}
+body .sq-panel .sq-action .ihb-label {
+  white-space: nowrap;
+}
+/* Previous/next control group, adapted from 21st.dev for the product carousel. */
+body .sq-controls .sq-nav-button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid #2458e64d;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--blue, #2458e6);
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+.sq-controls .sq-nav-button svg { display: block; width: 24px; height: 24px; }
+@media (hover: hover) and (pointer: fine) {
+  body .sq-controls .sq-nav-button:hover {
+    background: var(--blue, #2458e6);
+    border-color: var(--blue, #2458e6);
+    color: #fff;
+  }
+}
+body .sq-controls .sq-nav-button:focus-visible {
+  outline: 2px solid var(--blue, #2458e6);
+  outline-offset: 3px;
+  background: var(--blue, #2458e6);
+  color: #fff;
+}
 @media (hover: hover) and (pointer: fine) {
   .interactive-hover-button > :is(.ihb-label, .ihb-active, .ihb-fill) {
     transition: transform 300ms cubic-bezier(.4, 0, .2, 1), opacity 300ms cubic-bezier(.4, 0, .2, 1);
@@ -110,9 +151,32 @@ body .sq-structure.interactive-hover-button { border: 1px solid #0b78eb55; paddi
   body .blue.interactive-hover-button:is(:hover, :focus-visible) { background: rgb(255 255 255 / 12%); }
 }
 @media (max-width: 700px) {
-  body .interactive-hover-button { padding-inline: 26px; }
+  body .interactive-hover-button {
+    box-sizing: border-box;
+    padding-inline: 28px;
+    text-align: center;
+    white-space: nowrap;
+    font-size: clamp(12px, 3.6vw, 15px);
+  }
+  body .interactive-hover-button:is(.button, .product-catalog, .sq-action, .sq-structure) {
+    padding-inline: 34px 20px;
+  }
+  .interactive-hover-button > .ihb-label,
+  .interactive-hover-button > .ihb-active > span:first-child { white-space: nowrap; }
+  .interactive-hover-button > .ihb-active { gap: 8px; padding-inline: 12px; }
+  .interactive-hover-button > .ihb-active .ihb-arrow { flex-basis: 20px; width: 20px; height: 20px; }
   body .sq-controls .interactive-hover-button { padding: 0; }
+  body .sq-controls .sq-nav-button { width: 44px; height: 44px; }
+  body .sq-panel .sq-action.interactive-hover-button {
+    width: max-content;
+    padding-inline: 34px 20px;
+    font-size: clamp(12px, 3.6vw, 14px);
+    white-space: nowrap;
+  }
+  body .sq-panel .sq-action .ihb-label,
+  body .sq-panel .sq-action .ihb-active > span:first-child { white-space: nowrap; overflow-wrap: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
   .interactive-hover-button > :is(.ihb-label, .ihb-active, .ihb-fill) { transition: none; }
+  body .sq-controls .sq-nav-button { transition: none; }
 }

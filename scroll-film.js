@@ -13,6 +13,16 @@
   const short = matchMedia('(max-height: 449px)');
   const narrow = matchMedia('(max-width: 700px)');
   const clamp = value => Math.max(0, Math.min(1, value));
+  const warmScene = index => {
+    const image = images[index];
+    if (!image) return;
+    const source = image.parentElement.querySelector('source[data-srcset]');
+    if (source) {
+      source.srcset = source.dataset.srcset;
+      delete source.dataset.srcset;
+    }
+    if (image.loading === 'lazy') image.loading = 'eager';
+  };
   let frame = 0, enabled = false, travel = 1, offset = 0, header = 0;
   let active = -1;
 
@@ -27,6 +37,8 @@
     const nextActive = visible.indexOf(Math.max(...visible));
     if (active !== nextActive) {
       active = nextActive;
+      warmScene(active);
+      warmScene(active + 1);
       scenes.forEach((scene, i) => {
         scene.inert = i !== active;
         scene.setAttribute('aria-hidden', String(i !== active));
@@ -80,8 +92,7 @@
       delete root.dataset.chapter;
       return;
     }
-    // All overlaid scene assets must be ready before their first scroll reveal.
-    images.filter(Boolean).forEach(img => { img.loading = 'eager'; });
+    // Load the next scene ahead of its reveal without prioritizing all five at startup.
     header = document.querySelector('.header')?.getBoundingClientRect().height || 0;
     // Reserve the tallest heading so both titles and descriptions share a row.
     root.style.removeProperty('--film-heading-height');

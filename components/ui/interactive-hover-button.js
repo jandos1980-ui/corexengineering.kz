@@ -1,6 +1,8 @@
 /* The supplied hover interaction, adapted to native links and buttons. */
 (() => {
-  const selector = '.button, .product-catalog, .sq-action, .sq-controls button, .sq-structure';
+  const selector = '.button, .product-catalog, .sq-action, .sq-structure';
+  const alignDot = label => label.parentElement?.style.setProperty('--ihb-label-width', `${label.getBoundingClientRect().width}px`);
+  const labelObserver = 'ResizeObserver' in window ? new ResizeObserver(entries => entries.forEach(entry => alignDot(entry.target))) : null;
   function enhance(button) {
     if (button.querySelector(':scope > .ihb-label')) return;
     const icon = button.matches('.sq-controls button');
@@ -35,7 +37,10 @@
     fill.className = 'ihb-fill';
     fill.setAttribute('aria-hidden', 'true');
     button.append(label, active, fill);
+    alignDot(label);
+    labelObserver?.observe(label);
   }
   window.CorexButtons = {enhance};
   document.querySelectorAll(selector).forEach(enhance);
+  document.fonts?.ready.then(() => document.querySelectorAll('.interactive-hover-button > .ihb-label').forEach(alignDot));
 })();

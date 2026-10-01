@@ -304,21 +304,22 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .kinetic-menu nav.menu-content{max-width:100vw;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
  .kinetic-menu .menu-content-wrapper{height:auto;min-height:100%;padding:24px}
  :lang(kk) .kinetic-menu .nav-link{font-family:'Golos Text',sans-serif}
- .scroll-film.is-scroll-film{height:320svh}
+ .scroll-film.is-scroll-film{height:240svh}
  .is-scroll-film .film-stage{height:calc(100svh - var(--header-height));min-height:0}
  .scroll-film .film-scene .film-visual{object-position:center;transform-origin:center}
  .scroll-film .film-scene .film-shade{background:linear-gradient(0deg,#171d26f2 0%,#171d2699 28%,#171d2610 65%)}
  .scroll-film .film-kicker,.scroll-film .film-lead{display:block}
  .scroll-film.is-scroll-film .film-scene .film-kicker{font-size:12px;margin-bottom:12px}
  .scroll-film.is-scroll-film .film-scene .film-lead{font-size:16px;line-height:1.45;margin-top:12px}
- .scroll-film.is-scroll-film .film-scene .film-copy{top:auto!important;bottom:158px;padding:0 24px}
+ .scroll-film.is-scroll-film .film-scene .film-copy{top:auto!important;bottom:190px;padding:0 24px}
  .scroll-film.is-scroll-film .film-scene .film-copy h1,.scroll-film.is-scroll-film .film-scene .film-copy h2{font-size:clamp(22px,6vw,32px);min-height:0;line-height:1.2}
- .is-scroll-film .film-actions{bottom:78px;left:24px;right:24px;gap:8px;flex-wrap:nowrap;justify-content:space-between}
- .film-actions .button{font-size:14px;min-height:48px;padding:12px 16px;gap:8px}
- .film-skip{font-size:12px;min-height:44px;gap:4px}
+ .is-scroll-film .film-actions{bottom:78px;left:24px;right:24px;gap:10px;flex-direction:column;align-items:stretch;justify-content:center}
+ .film-actions .button{width:100%;font-size:14px;min-height:48px;padding:12px 16px;gap:8px}
+ .film-skip{font-size:13px;min-height:44px;gap:8px;justify-content:center;white-space:nowrap;text-align:center}
  .scroll-film[data-chapter='2'] .film-actions .button,.scroll-film[data-chapter='3'] .film-actions .button,.scroll-film[data-chapter='4'] .film-actions .button{visibility:hidden}
- .is-scroll-film .film-footer{bottom:16px;left:24px;right:24px}
- .film-instruction{display:block;font-size:12px;margin-bottom:8px}
+ .is-scroll-film .film-footer{top:12px;bottom:auto;left:24px;right:24px;display:flex;flex-direction:column-reverse;align-items:stretch;gap:8px}
+ .film-instruction{display:block;font-size:12px;margin:0}
+ .is-scroll-film .film-progress{flex:none}
  .film-step-label{display:none}
  .scroll-film .film-note{display:none}
  .scroll-film:not(.is-scroll-film) .film-scene{min-height:420px}
@@ -327,6 +328,7 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .scroll-film:not(.is-scroll-film) .film-actions{padding:20px 24px}
  @media(prefers-reduced-motion:reduce){.scroll-film .film-scene:not(:first-child){display:none}}
 }
+@media(min-width:701px){.film-nojs-mobile{display:none}}
 
 /* Initial hero entrance; the scroll controller retains ownership of scene fades. */
 @keyframes corex-hero-enter{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
