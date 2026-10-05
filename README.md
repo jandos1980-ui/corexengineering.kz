@@ -1,32 +1,40 @@
-# corexengineering.kz
+# CoreX Engineering
 
-## Установка на сервер клиента
+Статический сайт на русском и казахском языках. HTML, CSS и JavaScript; для работы не нужны Node.js, Python, PHP или база данных.
 
-Готовая сборка для https://corexengineering.kz/: [скачать corex-site.zip](https://github.com/jandos1980-ui/corexengineering.kz/releases/latest/download/corex-site.zip).
+## Скачать для размещения на хостинге
 
-Скачивайте файл **corex-site.zip** из Assets релиза. Автоматический **Source code (zip)** содержит демонстрационную версию с noindex и не предназначен для запуска основного домена без подготовки.
+**[Скачать corex-site.zip](https://github.com/jandos1980-ui/corexengineering.kz/releases/latest/download/corex-site.zip)**
 
-В клиентском архиве: папка `site/` для web root, `INSTALL.md`, версия исходников и контрольные суммы. [Инструкция установки](release/INSTALL.md). Сборка архива разработчиком: `python release/build_release.py --output ../output/client-release/corex-site.zip` (Python 3.9+). На сервере клиента Python не требуется.
+Программисту достаточно этого файла. Внутри:
 
-Проверка готового архива: `python release/verify_release.py ../output/client-release/corex-site.zip`. Проверяются состав ZIP, контрольные суммы, ссылки на локальные ресурсы, языковые SEO-теги и актуальный телефон. Для передачи программисту достаточно одного `corex-site.zip`; репозиторий целиком скачивать не нужно.
+- `site/` — файлы сайта; загрузите содержимое в корень хостинга.
+- `INSTALL.md` — установка, Nginx/Apache, настройка 404 и проверка сайта.
+- `VERSION.txt` и `SHA256SUMS.txt` — версия и контрольные суммы.
 
-## Публикация клиентского сайта
+Архив настроен для **https://corexengineering.kz/**. Для другого домена нужно обновить SEO-адреса. Форма подготавливает письмо в почтовой программе посетителя; серверной отправки нет.
 
-GitHub Pages автоматически публикует ветку `main`, каталог `/`:
-https://jandos1980-ui.github.io/corexengineering.kz/
+Автоматический **Code → Download ZIP** и **Source code (zip)** содержат исходники предпросмотра с отключённой индексацией. Для установки используйте **corex-site.zip** из Releases.
 
-Запрос на push изменений сайта включает их публикацию для клиента:
+## Структура проекта
 
-1. Проверить изменения и создать коммит.
-2. Отправить коммит в `origin/main` обычным push, без force.
-3. Дождаться успешного GitHub Actions `pages build and deployment` для этого коммита.
-4. Проверить изменения на публичном сайте и сообщить результат.
+- `index.html`, `kk/`, `solutions/` — страницы RU/KK.
+- `assets/`, `documents/` — используемые изображения, шрифты, лицензии и PDF.
+- `components/`, корневые CSS/JS — оформление и интерактивность.
+- `404.html`, `robots.txt` — служебные страницы и настройки предпросмотра.
+- `release/` — инструкция, сборщик клиентского архива и проверка его состава.
 
-Push только в другую ветку не обновляет клиентский сайт. Если публикация завершилась ошибкой, изменения в GitHub ещё не означают обновления сайта.
+## Разработка и выпуск
 
-Этот checkout содержит статический сайт с HTML в корне. Для его публикации не требуются npm, React или локальная сборка.
+Для локального просмотра из корня проекта: `python -m http.server 8765`, затем откройте http://localhost:8765/.
 
-## Редактор типографии
+Сборка и проверка клиентского архива (Python 3.9+ только на машине разработчика):
 
-Редактор вынесен в отдельный репозиторий: https://github.com/jandos1980-ui/corex-typography-editor.
-Он запускается локально с папкой сайта через `python serve.py --site ПУТЬ_К_САЙТУ`. В архив клиентского сайта редактор не входит.
+```bash
+python release/build_release.py --output ../corex-site.zip
+python release/verify_release.py ../corex-site.zip
+```
+
+[Инструкция установки](release/INSTALL.md) · [Результаты проверки](release/VALIDATION-2026-10-05.md)
+
+GitHub Pages публикует `main`, каталог `/`: [предпросмотр сайта](https://jandos1980-ui.github.io/corexengineering.kz/). Предпросмотр сохраняет `noindex`; производственный ZIP содержит canonical, hreflang и sitemap для основного домена. После изменения сайта проверяйте архив и успешность Pages deployment перед передачей.
