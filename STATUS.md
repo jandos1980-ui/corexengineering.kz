@@ -19,7 +19,7 @@
 
 ## Публикация и передача
 
-GitHub Pages: [сайт](https://jandos1980-ui.github.io/corexengineering.kz/), источник main, каталог /. Изменения подготовлены к отправке; результат deployment проверяется после push.
+GitHub Pages: [сайт](https://jandos1980-ui.github.io/corexengineering.kz/), источник main, каталог /. Коммит сайта `498536cdfc4d6ad6ab7df96e57dd92ef60c6dba9` отправлен в origin/main. [Pages build and deployment 37305097447](https://github.com/jandos1980-ui/corexengineering.kz/actions/runs/37305097447) завершён успешно. После публикации все 24 публичные страницы и три изменённых CSS/JS сверены с исходниками; вложенная английская 404 возвращает HTTP 404 и ссылку на EN-главную. Отчёт: output/english-20261005/published-report.json.
 
 Опубликованный [клиентский релиз v2026.10.05-client](https://github.com/jandos1980-ui/corexengineering.kz/releases/tag/v2026.10.05-client) пока содержит прежнюю RU/KK-версию (101 файл), без английского языка. В этом этапе релиз не заменяется. Для актуального RU/KK/EN-архива: `python release/build_release.py --output ../corex-site.zip`, затем `python release/verify_release.py ../corex-site.zip`.
 
