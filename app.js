@@ -3,6 +3,7 @@
 (() => {
   const copy = document.querySelector('.team-company-content p');
   if (!copy) return;
+  if (document.documentElement.lang === 'en') return;
   copy.textContent = document.documentElement.lang === 'kk'
     ? 'Coolnet авторизациясы расталған: CoreX Engineering өндіруші регламенттері бойынша сервис көрсетеді.'
     : 'Авторизация Coolnet подтверждает: CoreX Engineering выполняет сервис по регламентам производителя.';

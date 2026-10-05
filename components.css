@@ -566,6 +566,10 @@
 .footer .footer-name:is(:hover,:focus-visible) .footer-name-engineering{color:#fff}
 
 /* Keep a usable mail link until the form handler is ready. */
+.header-actions .language{display:flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;min-height:44px;padding:0;text-align:center}
+.header-actions .mobile-menu>summary{box-sizing:border-box;width:112px;justify-content:flex-start}
+.header-actions .mobile-menu>summary .menu-button-text{text-align:left;flex:1;min-width:0}
+.header-actions .mobile-menu>summary .menu-caret{flex-shrink:0}
 #project-form[hidden],#form-fallback[hidden]{display:none!important}
 #form-fallback a{color:#fff;text-underline-offset:.2em;overflow-wrap:anywhere}
 @media(min-width:391px) and (max-width:850px){

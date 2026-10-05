@@ -1,6 +1,6 @@
 # Установка CoreX Engineering
 
-Архив предназначен для https://corexengineering.kz/ в корне домена. Это готовый статический сайт RU/KK. Node.js, npm, Python, PHP и база данных для работы сайта не нужны.
+Архив предназначен для https://corexengineering.kz/ в корне домена. Это готовый статический сайт RU/KK/EN. Node.js, npm, Python, PHP и база данных для работы сайта не нужны.
 
 ## Состав
 
@@ -47,9 +47,9 @@ ErrorDocument 404 /404.html
 
 ## Индексация
 
-Все 16 страниц разрешены к индексации. Canonical, hreflang, og:url и sitemap используют https://corexengineering.kz/. `404.html` имеет noindex. robots.txt и sitemap.xml должны открываться в корне домена. На другом домене или в подпапке эту сборку без обновления адресов не публикуйте.
+Все 24 страницы разрешены к индексации. Canonical, hreflang, og:url и sitemap используют https://corexengineering.kz/. `404.html` имеет noindex. robots.txt и sitemap.xml должны открываться в корне домена. На другом домене или в подпапке эту сборку без обновления адресов не публикуйте.
 
-После запуска добавьте `https://corexengineering.kz/sitemap.xml` в подтверждённые Google Search Console и Яндекс Вебмастер, запросите проверку главной RU/KK. Публикация и sitemap не гарантируют сроки индексации. Демоверсия GitHub Pages намеренно остаётся с noindex; скачивайте именно `corex-site.zip` из Assets релиза, а не автоматический Source code ZIP.
+После запуска добавьте `https://corexengineering.kz/sitemap.xml` в подтверждённые Google Search Console и Яндекс Вебмастер, запросите проверку главной RU/KK/EN. Публикация и sitemap не гарантируют сроки индексации. Демоверсия GitHub Pages намеренно остаётся с noindex; скачивайте именно `corex-site.zip` из Assets релиза, а не автоматический Source code ZIP.
 
 ## Заявки и редактирование
 

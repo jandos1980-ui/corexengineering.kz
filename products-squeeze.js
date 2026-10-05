@@ -6,12 +6,13 @@
   const cards = [...grid.querySelectorAll('.product-card')];
   if (cards.length < 2) return;
   const kk = document.documentElement.lang === 'kk';
+  const en = document.documentElement.lang === 'en';
   const slides = cards.map(card => ({summary:card.querySelector('.product-summary').textContent,title:card.querySelector('h3').textContent, href:card.getAttribute('href'), image:card.querySelector('img').cloneNode(true), action:card.querySelector('.product-link').firstChild.textContent}));
   const root = document.createElement('div'); root.className='sq-carousel';
   const controls=document.createElement('div'); controls.className='sq-controls';
   const prev=document.createElement('button'), next=document.createElement('button');
   // Adapted from the previous/next button group pattern on 21st.dev.
-  for(const [button,label,direction] of [[prev,kk?'Алдыңғы жабдық':'Предыдущее оборудование','prev'],[next,kk?'Келесі жабдық':'Следующее оборудование','next']]){
+  for(const [button,label,direction] of [[prev,en?'Previous equipment':kk?'Алдыңғы жабдық':'Предыдущее оборудование','prev'],[next,en?'Next equipment':kk?'Келесі жабдық':'Следующее оборудование','next']]){
     button.type='button';button.className='sq-nav-button';button.setAttribute('aria-label',label);
     const arrow=document.createElementNS('http://www.w3.org/2000/svg','svg');
     arrow.setAttribute('viewBox','0 0 24 24');arrow.setAttribute('width','24');arrow.setAttribute('height','24');
@@ -22,7 +23,7 @@
     arrow.append(path);button.append(arrow);
   }
   controls.append(prev,next);
-  const strip=document.createElement('div');strip.className='sq-strip';strip.setAttribute('role','tablist');strip.setAttribute('aria-label',kk?'Жабдық':'Оборудование');
+  const strip=document.createElement('div');strip.className='sq-strip';strip.setAttribute('role','tablist');strip.setAttribute('aria-label',en?'Equipment':kk?'Жабдық':'Оборудование');
   const details=document.createElement('div');details.className='sq-details';
   const stageContent=document.createElement('div');stageContent.className='sq-content-layer';
   const tabs=[],panels=[],motions=[];

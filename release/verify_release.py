@@ -42,7 +42,7 @@ def verify(path):
     for name, checksum in sums.items():
         assert hashlib.sha256(data[name]).hexdigest() == checksum, name
     docs = {n: Document(b.decode('utf-8-sig')) for n, b in data.items() if n.endswith('.html')}
-    assert len(docs) == 17
+    assert len(docs) == 25
     count = 0
     for name, doc in docs.items():
         for ref in doc.refs:
@@ -65,10 +65,10 @@ def verify(path):
                 assert dest in data, (name, ref)
         if name.endswith('/index.html'):
             text = body.decode()
-            assert 'noindex' not in text and 'rel="canonical"' in text and text.count('hreflang=') == 3, name
+            assert 'noindex' not in text and 'rel="canonical"' in text and text.count('rel="alternate" hreflang=') == 4, name
             assert 'tel:+77017000012' in text, name
-    assert data['site/sitemap.xml'].count(b'<loc>') == 16
-    print(f'PASS: {len(data)} files, 17 HTML, {count} local HTML references, CSS resources, SEO, checksums, archive contents')
+    assert data['site/sitemap.xml'].count(b'<loc>') == 24
+    print(f'PASS: {len(data)} files, 25 HTML, {count} local HTML references, CSS resources, SEO, checksums, archive contents')
 
 
 if __name__ == '__main__':

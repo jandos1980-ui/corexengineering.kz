@@ -13,9 +13,11 @@ BASE = 'https://corexengineering.kz/'
 
 def build(output):
     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    if subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True).strip():
+        revision += ' (with local working-tree changes)'
     files = {p.relative_to(ROOT).as_posix(): p.read_bytes() for p in ROOT.rglob('*')
              if p.is_file() and p.suffix in ('.html', '.css', '.js')
-             and p.relative_to(ROOT).parts[0] in ('index.html', '404.html', 'solutions', 'kk', 'components', 'app.js', 'components.css', 'style.css', 'products-squeeze.js', 'scroll-film.js', 'scroll-film.css', 'team-stars.js')}
+             and p.relative_to(ROOT).parts[0] in ('index.html', '404.html', 'solutions', 'kk', 'en', 'components', 'app.js', 'components.css', 'style.css', 'products-squeeze.js', 'scroll-film.js', 'scroll-film.css', 'team-stars.js')}
     text = '\n'.join(v.decode('utf-8') for v in files.values())
     assets = set(re.findall(r'(?:assets|documents|media)/[A-Za-z0-9_.\-/]+\.[A-Za-z0-9]+', text))
     gallery = json.loads(re.search(r'const galleryCounts=(\{[^;]+\});', text).group(1).replace("'", '"'))
@@ -26,21 +28,22 @@ def build(output):
     for asset in assets:
         files[asset] = (ROOT / asset).read_bytes()
     pages = sorted(k for k in files if k.endswith('index.html'))
-    assert len(pages) == 16
+    assert len(pages) == 24
     urls = []
     for path in pages:
         html = files[path].decode('utf-8')
         route = path.removesuffix('index.html')
         url = BASE + route
         urls.append(url)
-        ru_route = route.removeprefix('kk/')
+        ru_route = route.removeprefix('kk/').removeprefix('en/')
         ru, kk = BASE + ru_route, BASE + 'kk/' + ru_route
         html = re.sub(r'<meta name="robots"[^>]*>', '', html)
         html = re.sub(r'<link rel="(?:canonical|alternate)"[^>]*>', '', html)
         html = re.sub(r'<meta property="og:url"[^>]*>', f'<meta property="og:url" content="{url}">', html)
         tags = f'<link rel="canonical" href="{url}"><link rel="alternate" hreflang="ru-KZ" href="{ru}"><link rel="alternate" hreflang="kk-KZ" href="{kk}"><link rel="alternate" hreflang="x-default" href="{ru}">'
+        tags += f'<link rel="alternate" hreflang="en" href="{BASE}en/{ru_route}">'
         files[path] = html.replace('</head>', tags + '</head>').encode('utf-8')
-    files['404.html'] = files['404.html'].decode('utf-8').replace('href="/corexengineering.kz/"', 'href="/"').encode('utf-8')
+    files['404.html'] = files['404.html'].decode('utf-8').replace('href="/corexengineering.kz/', 'href="/').encode('utf-8')
     files['robots.txt'] = f'User-agent: *\nAllow: /\n\nSitemap: {BASE}sitemap.xml\n'.encode()
     files['sitemap.xml'] = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{escape(u)}</loc></url>\n' for u in urls) + '</urlset>\n').encode()
     payload = {'site/' + k: v for k, v in files.items()}
