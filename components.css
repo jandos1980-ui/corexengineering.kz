@@ -558,3 +558,21 @@
 .team-competencies h4{font:500 24px/1.25 "Golos Text",sans-serif;margin:0 0 6px;overflow-wrap:break-word}
 .team-competencies li p{font:400 16px/1.5 "Golos Text",sans-serif;color:var(--muted);margin:0}
 @media(max-width:900px){.team-competencies h4{font-size:21px}}
+
+/* Keep Core white and highlight the two other wordmark parts on interaction. */
+.footer .footer-name,.footer .footer-name:hover,.footer .footer-name:focus-visible{color:#fff}
+.footer .footer-name .footer-name-x{font-weight:inherit;color:inherit}
+.footer .footer-name:is(:hover,:focus-visible) .footer-name-x{color:var(--blue-text)}
+.footer .footer-name:is(:hover,:focus-visible) .footer-name-engineering{color:#fff}
+
+/* Keep a usable mail link until the form handler is ready. */
+#project-form[hidden],#form-fallback[hidden]{display:none!important}
+#form-fallback a{color:#fff;text-underline-offset:.2em;overflow-wrap:anywhere}
+@media(min-width:391px) and (max-width:850px){
+  .scope-grid article{padding:24px 20px}
+  .scope-grid h3{font-size:22px;line-height:1.3;letter-spacing:-.025em}
+}
+@media(max-width:390px){
+  .scope-grid article{padding:24px 18px}
+  .scope-grid h3{font-size:20px;line-height:1.3;letter-spacing:-.025em}
+}

@@ -76,6 +76,10 @@ if(form){
     const result=document.querySelector('#mail-result');result.hidden=false;
     document.querySelector('#mail-link').focus({preventScroll:true});
   });
+  // Enable the form only after its submit handler is ready.
+  form.querySelectorAll('[disabled]').forEach(control=>{control.disabled=false;});
+  form.hidden=false;
+  document.querySelector('#form-fallback').hidden=true;
 }
 document.querySelectorAll('.mobile-menu nav a').forEach(link=>link.addEventListener('click',()=>{link.closest('details').removeAttribute('open');}));
 

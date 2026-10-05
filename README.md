@@ -8,6 +8,8 @@
 
 В клиентском архиве: папка `site/` для web root, `INSTALL.md`, версия исходников и контрольные суммы. [Инструкция установки](release/INSTALL.md). Сборка архива разработчиком: `python release/build_release.py --output ../output/client-release/corex-site.zip` (Python 3.9+). На сервере клиента Python не требуется.
 
+Проверка готового архива: `python release/verify_release.py ../output/client-release/corex-site.zip`. Проверяются состав ZIP, контрольные суммы, ссылки на локальные ресурсы, языковые SEO-теги и актуальный телефон. Для передачи программисту достаточно одного `corex-site.zip`; репозиторий целиком скачивать не нужно.
+
 ## Публикация клиентского сайта
 
 GitHub Pages автоматически публикует ветку `main`, каталог `/`:

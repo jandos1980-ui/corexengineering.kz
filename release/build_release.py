@@ -40,7 +40,7 @@ def build(output):
         html = re.sub(r'<meta property="og:url"[^>]*>', f'<meta property="og:url" content="{url}">', html)
         tags = f'<link rel="canonical" href="{url}"><link rel="alternate" hreflang="ru-KZ" href="{ru}"><link rel="alternate" hreflang="kk-KZ" href="{kk}"><link rel="alternate" hreflang="x-default" href="{ru}">'
         files[path] = html.replace('</head>', tags + '</head>').encode('utf-8')
-    files['404.html'] = '''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - CoreX Engineering</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/components.css"></head><body><main class="section"><h1>404</h1><h2>Страница не найдена / Бет табылмады</h2><a class="button blue" href="/">CoreX Engineering</a></main></body></html>'''.encode('utf-8')
+    files['404.html'] = files['404.html'].decode('utf-8').replace('href="/corexengineering.kz/"', 'href="/"').encode('utf-8')
     files['robots.txt'] = f'User-agent: *\nAllow: /\n\nSitemap: {BASE}sitemap.xml\n'.encode()
     files['sitemap.xml'] = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{escape(u)}</loc></url>\n' for u in urls) + '</urlset>\n').encode()
     payload = {'site/' + k: v for k, v in files.items()}
