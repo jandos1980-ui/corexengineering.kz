@@ -12,14 +12,39 @@
     if (!ctx) return;
     footer.prepend(canvas);
     let width = 0, height = 0, frame = 0, visible = false, lastCell = '';
+    let lastAmbient = 0, lastDraw = 0;
     const highlights = new Map();
     // Same oblique lattice as the React reference, sized to the actual footer.
     const matrix = new DOMMatrix([0.675, 0.168, -0.75, 0.488, 0, 0]);
     const inverse = matrix.inverse();
     let bounds;
     const point = (x, y) => new DOMPoint(x - width / 2, y - height / 2).matrixTransform(inverse);
+    const ambientEnabled = () => visible && !document.hidden && !motion.matches && !pointer.matches;
+    function highlight(x, y, now) {
+      highlights.set(`${x}:${y}`, {x, y, time: now, color: colors[Math.floor(Math.random() * colors.length)]});
+    }
     function draw(now = performance.now()) {
       frame = 0;
+      const ambient = ambientEnabled();
+      if (!visible || document.hidden || motion.matches) highlights.clear();
+      // Touch devices have no hover: gently light cells while the footer is visible.
+      if (ambient && (!lastAmbient || now - lastAmbient >= 550)) {
+        const rect = footer.getBoundingClientRect();
+        const top = Math.max(0, -rect.top);
+        const bottom = Math.min(height, innerHeight - rect.top);
+        for (let i = 0; i < (lastAmbient ? 1 : 5); i++) {
+          const position = point((0.15 + Math.random() * 0.7) * width,
+            top + (0.15 + Math.random() * 0.7) * Math.max(0, bottom - top));
+          highlight(Math.floor(position.x / 64), Math.floor(position.y / 32), now);
+        }
+        lastAmbient = now;
+      }
+      // Limit mobile canvas painting to 30 fps.
+      if (ambient && now - lastDraw < 1000 / 30) {
+        frame = requestAnimationFrame(draw);
+        return;
+      }
+      lastDraw = now;
       ctx.clearRect(0, 0, width, height);
       ctx.save();
       ctx.translate(width / 2, height / 2);
@@ -55,7 +80,7 @@
       }
       ctx.stroke();
       ctx.restore();
-      if (highlights.size && visible) frame = requestAnimationFrame(draw);
+      if ((highlights.size || ambient) && visible && !document.hidden && !motion.matches) frame = requestAnimationFrame(draw);
     }
     function resize() {
       width = footer.clientWidth; height = footer.clientHeight;
@@ -72,28 +97,33 @@
       cancelAnimationFrame(frame); draw();
     }
     function reset() {
-      highlights.clear(); lastCell = ''; cancelAnimationFrame(frame); draw();
+      highlights.clear(); lastCell = ''; lastAmbient = 0; lastDraw = 0;
+      cancelAnimationFrame(frame); draw();
     }
-    footer.addEventListener('pointermove', event => {
-      if (!visible || motion.matches || !pointer.matches || event.pointerType === 'touch') return;
+    function highlightPointer(event) {
+      if (!visible || document.hidden || motion.matches || (!pointer.matches && event.pointerType !== 'touch')) return;
       const rect = footer.getBoundingClientRect();
       const position = point(event.clientX - rect.left, event.clientY - rect.top);
       const x = Math.floor(position.x / 64), y = Math.floor(position.y / 32);
       const key = `${x}:${y}`;
       if (lastCell === key) return;
       lastCell = key;
-      highlights.set(key, {x, y, time: performance.now(), color: colors[Math.floor(Math.random() * colors.length)]});
+      highlight(x, y, performance.now());
       if (!frame) frame = requestAnimationFrame(draw);
+    }
+    footer.addEventListener('pointermove', highlightPointer, {passive: true});
+    footer.addEventListener('pointerdown', event => {
+      if (event.pointerType === 'touch') highlightPointer(event);
     }, {passive: true});
     footer.addEventListener('pointerleave', () => { lastCell = ''; });
     resize();
     new ResizeObserver(resize).observe(footer);
     new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
-      if (!visible) reset();
+      reset();
     }).observe(footer);
     motion.addEventListener('change', reset);
     pointer.addEventListener('change', reset);
-    document.addEventListener('visibilitychange', () => { if (document.hidden) reset(); });
+    document.addEventListener('visibilitychange', reset);
   });
 })();
