@@ -17,7 +17,8 @@ def build(output):
         revision += ' (with local working-tree changes)'
     files = {p.relative_to(ROOT).as_posix(): p.read_bytes() for p in ROOT.rglob('*')
              if p.is_file() and p.suffix in ('.html', '.css', '.js')
-             and p.relative_to(ROOT).parts[0] in ('index.html', '404.html', 'solutions', 'kk', 'en', 'components', 'app.js', 'components.css', 'style.css', 'products-squeeze.js', 'scroll-film.js', 'scroll-film.css', 'team-stars.js')}
+             and p.relative_to(ROOT).parts[0] in ('index.html', '404.html', 'solutions', 'kk', 'en', 'components', 'app.js', 'components.css', 'style.css', 'products-squeeze.js', 'scroll-film.js', 'scroll-film.css', 'team-stars.js', 'certificate-preview.css', 'certificate-preview.js', 'team-layout.css', 'design-layout.css', 'detail-layout.css', 'shell-layout.css', 'number-motion.js')}
+    files['api/contact.php'] = (ROOT / 'api' / 'contact.php').read_bytes()
     text = '\n'.join(v.decode('utf-8') for v in files.values())
     assets = set(re.findall(r'(?:assets|documents|media)/[A-Za-z0-9_.\-/]+\.[A-Za-z0-9]+', text))
     gallery = json.loads(re.search(r'const galleryCounts=(\{[^;]+\});', text).group(1).replace("'", '"'))

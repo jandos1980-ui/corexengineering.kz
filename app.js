@@ -59,28 +59,67 @@
 })();
 const form=document.querySelector('#project-form');
 if(form){
-  const baseSubject=form.dataset.subject;
-  const task=form.querySelector('[name="task"]');
-  let generatedTask='';
-  document.querySelectorAll('[data-scenario]').forEach(link=>link.addEventListener('click',()=>{
-    const scenario=link.dataset.scenario;
-    if(!task.value.trim() || task.value===generatedTask){task.value=scenario;generatedTask=scenario;}
-    form.dataset.subject=baseSubject+' — '+scenario;
-    document.querySelector('#mail-result').hidden=true;
-  }));
-  form.addEventListener('submit',event=>{
-    event.preventDefault();
-    if(!form.reportValidity())return;
-    const data=new FormData(form);
-    const body=[String(data.get('name')||''),String(data.get('company')||''),'',String(data.get('task')||''),'',location.origin+location.pathname].join('\n');
-    document.querySelector('#mail-link').href=`mailto:${form.dataset.email}?subject=${encodeURIComponent(form.dataset.subject)}&body=${encodeURIComponent(body)}`;
-    const result=document.querySelector('#mail-result');result.hidden=false;
-    document.querySelector('#mail-link').focus({preventScroll:true});
-  });
-  // Enable the form only after its submit handler is ready.
-  form.querySelectorAll('[disabled]').forEach(control=>{control.disabled=false;});
-  form.hidden=false;
-  document.querySelector('#form-fallback').hidden=true;
+  const lang=document.documentElement.lang;
+  const messages={
+    ru:{sending:'Отправляем…',success:'Заявка принята к отправке. Спасибо! Мы ответим на указанный email.',error:'Не удалось подтвердить отправку. Текст сохранён в форме. Попробуйте позже или напишите на info@corexengineering.kz.',rate:'Слишком много попыток. Попробуйте через час или напишите на info@corexengineering.kz.'},
+    en:{sending:'Sending…',success:'Your enquiry has been accepted for sending. Thank you! We will reply to your email.',error:'We could not confirm sending. Your text is still in the form. Try later or email info@corexengineering.kz.',rate:'Too many attempts. Try again in an hour or email info@corexengineering.kz.'},
+    kk:{sending:'Жіберілуде…',success:'Өтінім жіберуге қабылданды. Рақмет! Көрсетілген email мекенжайына жауап береміз.',error:'Жіберілгенін растау мүмкін болмады. Мәтін формада қалды. Кейінірек қайталаңыз немесе info@corexengineering.kz мекенжайына жазыңыз.',rate:'Әрекет тым көп. Бір сағаттан кейін қайталаңыз немесе info@corexengineering.kz мекенжайына жазыңыз.'}
+  }[lang] || null;
+  if(messages){
+    const task=form.querySelector('[name="task"]');
+    const result=form.querySelector('#mail-result');
+    const status=result.querySelector('[role="status"]');
+    const button=form.querySelector('[type="submit"]');
+    const validation={
+      ru:{required:'Заполните это поле.',email:'Введите email в формате name@example.com без пробелов.'},
+      en:{required:'Please fill in this field.',email:'Enter an email like name@example.com without spaces.'},
+      kk:{required:'Бұл өрісті толтырыңыз.',email:'Email мекенжайын бос орынсыз name@example.com форматында енгізіңіз.'}
+    }[lang];
+    const fields=[...form.querySelectorAll('[required]')];
+    const emailPattern=/^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/;
+    const validate=field=>{
+      const value=field.value.trim();
+      let error=value ? '' : validation.required;
+      if(value && field.name==='email' && (!emailPattern.test(value) || value.length>254 || value.split('@')[0].length>64))error=validation.email;
+      field.setCustomValidity(error);
+    };
+    fields.forEach(field=>{
+      field.addEventListener('input',()=>validate(field));
+      field.addEventListener('blur',()=>{field.value=field.value.trim();validate(field);});
+      field.addEventListener('invalid',()=>validate(field));
+    });
+    let generatedTask='',busy=false;
+    document.querySelectorAll('[data-scenario]').forEach(link=>link.addEventListener('click',()=>{
+      if(busy)return;
+      const scenario=link.dataset.scenario;
+      if(!task.value.trim() || task.value===generatedTask){task.value=scenario;generatedTask=scenario;validate(task);}
+      result.hidden=true;
+    }));
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();
+      if(busy)return;
+      fields.forEach(field=>{field.value=field.value.trim();validate(field);});
+      if(!form.reportValidity())return;
+      const data=Object.fromEntries(new FormData(form));
+      data.language=lang; data.page=location.pathname;
+      busy=true;button.disabled=true;form.setAttribute('aria-busy','true');
+      result.hidden=false;status.textContent=messages.sending;
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),20000);
+      try{
+        const response=await fetch(form.action,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data),signal:controller.signal,credentials:'same-origin'});
+        if(response.status===429){status.textContent=messages.rate;return;}
+        const reply=await response.json();
+        if(!response.ok || reply.ok!==true || reply.code!=='accepted')throw new Error('Not accepted');
+        status.textContent=messages.success;
+        // Keep fields intact: a visitor may have edited them during the request.
+      }catch(error){status.textContent=messages.error;}
+      finally{clearTimeout(timeout);busy=false;button.disabled=false;form.removeAttribute('aria-busy');}
+    });
+    form.querySelectorAll('[disabled]').forEach(control=>{control.disabled=false;});
+    form.hidden=false;
+    document.querySelector('#form-fallback').hidden=true;
+  }
 }
 document.querySelectorAll('.mobile-menu nav a').forEach(link=>link.addEventListener('click',()=>{link.closest('details').removeAttribute('open');}));
 

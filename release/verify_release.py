@@ -18,7 +18,7 @@ class Document(HTMLParser):
         attrs = dict(attrs)
         if 'id' in attrs:
             self.ids.add(attrs['id'])
-        for key in ('src', 'href'):
+        for key in ('src', 'href', 'action'):
             if key in attrs:
                 self.refs.append(attrs[key])
         for key in ('srcset', 'data-srcset'):
@@ -67,6 +67,7 @@ def verify(path):
             text = body.decode()
             assert 'noindex' not in text and 'rel="canonical"' in text and text.count('rel="alternate" hreflang=') == 4, name
             assert 'tel:+77017000012' in text, name
+    assert 'site/api/contact.php' in data
     assert data['site/sitemap.xml'].count(b'<loc>') == 24
     print(f'PASS: {len(data)} files, 25 HTML, {count} local HTML references, CSS resources, SEO, checksums, archive contents')
 
