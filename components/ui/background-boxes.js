@@ -12,39 +12,18 @@
     if (!ctx) return;
     footer.prepend(canvas);
     let width = 0, height = 0, frame = 0, visible = false, lastCell = '';
-    let lastAmbient = 0, lastDraw = 0;
     const highlights = new Map();
     // Same oblique lattice as the React reference, sized to the actual footer.
     const matrix = new DOMMatrix([0.675, 0.168, -0.75, 0.488, 0, 0]);
     const inverse = matrix.inverse();
     let bounds;
     const point = (x, y) => new DOMPoint(x - width / 2, y - height / 2).matrixTransform(inverse);
-    const ambientEnabled = () => visible && !document.hidden && !motion.matches && !pointer.matches;
     function highlight(x, y, now) {
       highlights.set(`${x}:${y}`, {x, y, time: now, color: colors[Math.floor(Math.random() * colors.length)]});
     }
     function draw(now = performance.now()) {
       frame = 0;
-      const ambient = ambientEnabled();
       if (!visible || document.hidden || motion.matches) highlights.clear();
-      // Touch devices have no hover: gently light cells while the footer is visible.
-      if (ambient && (!lastAmbient || now - lastAmbient >= 550)) {
-        const rect = footer.getBoundingClientRect();
-        const top = Math.max(0, -rect.top);
-        const bottom = Math.min(height, innerHeight - rect.top);
-        for (let i = 0; i < (lastAmbient ? 1 : 5); i++) {
-          const position = point((0.15 + Math.random() * 0.7) * width,
-            top + (0.15 + Math.random() * 0.7) * Math.max(0, bottom - top));
-          highlight(Math.floor(position.x / 64), Math.floor(position.y / 32), now);
-        }
-        lastAmbient = now;
-      }
-      // Limit mobile canvas painting to 30 fps.
-      if (ambient && now - lastDraw < 1000 / 30) {
-        frame = requestAnimationFrame(draw);
-        return;
-      }
-      lastDraw = now;
       ctx.clearRect(0, 0, width, height);
       ctx.save();
       ctx.translate(width / 2, height / 2);
@@ -80,7 +59,7 @@
       }
       ctx.stroke();
       ctx.restore();
-      if ((highlights.size || ambient) && visible && !document.hidden && !motion.matches) frame = requestAnimationFrame(draw);
+      if (highlights.size && visible && !document.hidden && !motion.matches) frame = requestAnimationFrame(draw);
     }
     function resize() {
       width = footer.clientWidth; height = footer.clientHeight;
@@ -97,7 +76,7 @@
       cancelAnimationFrame(frame); draw();
     }
     function reset() {
-      highlights.clear(); lastCell = ''; lastAmbient = 0; lastDraw = 0;
+      highlights.clear(); lastCell = '';
       cancelAnimationFrame(frame); draw();
     }
     function highlightPointer(event) {
@@ -115,6 +94,16 @@
     footer.addEventListener('pointerdown', event => {
       if (event.pointerType === 'touch') highlightPointer(event);
     }, {passive: true});
+    // Native scrolling cancels pointermove; passive touchmove keeps the trail under the finger.
+    footer.addEventListener('touchmove', event => {
+      const touch = event.touches[0];
+      if (touch) highlightPointer({clientX: touch.clientX, clientY: touch.clientY, pointerType: 'touch'});
+    }, {passive: true});
+    const releaseTouch = () => { lastCell = ''; };
+    footer.addEventListener('pointerup', releaseTouch, {passive: true});
+    footer.addEventListener('pointercancel', releaseTouch, {passive: true});
+    footer.addEventListener('touchend', releaseTouch, {passive: true});
+    footer.addEventListener('touchcancel', releaseTouch, {passive: true});
     footer.addEventListener('pointerleave', () => { lastCell = ''; });
     resize();
     new ResizeObserver(resize).observe(footer);
