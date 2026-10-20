@@ -49,6 +49,7 @@ def build(output):
     files['sitemap.xml'] = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{escape(u)}</loc></url>\n' for u in urls) + '</urlset>\n').encode()
     payload = {'site/' + k: v for k, v in files.items()}
     payload['INSTALL.md'] = (ROOT / 'release' / 'INSTALL.md').read_bytes()
+    payload['PROGRAMMER.md'] = (ROOT / 'release' / 'PROGRAMMER.md').read_bytes()
     payload['VERSION.txt'] = f'CoreX Engineering production release\nSource commit: {revision}\nDomain: {BASE}\n'.encode()
     payload['SHA256SUMS.txt'] = ''.join(f'{hashlib.sha256(v).hexdigest()}  {k}\n' for k, v in sorted(payload.items())).encode()
     output.parent.mkdir(parents=True, exist_ok=True)

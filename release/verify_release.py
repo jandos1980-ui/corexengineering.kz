@@ -34,7 +34,8 @@ def verify(path):
         assert len(names) == len(set(names)), 'Duplicate filenames'
         assert all(not n.startswith('/') and '..' not in n.split('/') for n in names), 'Unsafe paths'
         data = {n: archive.read(n) for n in names}
-    allowed_top = {'INSTALL.md', 'VERSION.txt', 'SHA256SUMS.txt'}
+    allowed_top = {'INSTALL.md', 'PROGRAMMER.md', 'VERSION.txt', 'SHA256SUMS.txt'}
+    assert allowed_top.issubset(data), 'Missing handoff instructions or version/checksum files'
     assert all(n.startswith('site/') or n in allowed_top for n in names)
     assert not any(re.search(r'(^|/)(\.git|node_modules|video|analysis|output|typography|release)(/|$)', n) for n in names)
     sums = dict(line.split('  ', 1)[::-1] for line in data['SHA256SUMS.txt'].decode().splitlines())
